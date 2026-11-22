@@ -11,27 +11,34 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;background:var(--cream);color:var(--ink);font-family:"Iansui",system-ui,sans-serif;
   display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 16px}
-h1{font-family:"Iansui",system-ui,sans-serif;font-weight:900;font-size:clamp(44px,9vw,96px);line-height:1.15;text-align:center;letter-spacing:.05em}
+h1{font-family:"Iansui",system-ui,sans-serif;font-weight:900;font-size:clamp(48px,min(10vw,14vh),160px);line-height:1.12;text-align:center;letter-spacing:.05em}
 h1 .n{color:var(--red);font-family:"Iansui",system-ui,sans-serif;display:inline-block;transform:rotate(-6deg);margin:0 .08em}
-.who{margin-top:18px;font-size:clamp(17px,2.6vw,24px);color:var(--muted);text-align:center;line-height:1.6}
-.choices{margin-top:56px;display:grid;grid-template-columns:repeat(3,minmax(0,260px));gap:28px;width:100%;justify-content:center}
+.who{margin-top:2vh;font-size:clamp(18px,min(2.6vw,3.6vh),34px);color:var(--muted);text-align:center;line-height:1.6}
+.choices{margin-top:5vh;display:grid;grid-template-columns:repeat(3,min(29vw,40vh,420px));gap:clamp(20px,2.5vw,44px);width:100%;justify-content:center}
 .choice{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;aspect-ratio:1/1;
-  background:var(--paper);border-radius:28px;text-decoration:none;color:var(--ink);
+  background:var(--paper);border-radius:clamp(24px,2.4vw,40px);text-decoration:none;color:var(--ink);
   box-shadow:0 8px 24px rgba(58,51,48,.12);border:5px solid #fff;transition:transform .2s,box-shadow .2s,border-color .2s}
 .choice:hover,.choice:focus-visible{transform:translateY(-6px);box-shadow:0 16px 34px rgba(58,51,48,.18);border-color:var(--red);outline:none}
-.choice .ring{width:clamp(56px,9vw,84px);height:auto}
+.choice .ring{width:clamp(60px,min(9vw,13vh),130px);height:auto}
 h1 .sun{color:var(--red)}
-.choice.a b{white-space:nowrap;letter-spacing:.04em;font-size:clamp(24px,2.9vw,34px)}
-.choice .ic{font-size:clamp(48px,9vw,76px);line-height:1}
-.choice b{font-family:"Iansui",system-ui,sans-serif;font-size:clamp(26px,3.4vw,40px);color:var(--red);letter-spacing:.1em;text-align:center;line-height:1.25}
+.choice.a b{white-space:nowrap;letter-spacing:.04em;font-size:clamp(24px,min(3vw,4.4vh),50px)}
+.choice .ic{font-size:clamp(52px,min(9vw,12vh),120px);line-height:1}
+.choice b{font-family:"Iansui",system-ui,sans-serif;font-size:clamp(26px,min(3.5vw,5vh),58px);color:var(--red);letter-spacing:.1em;text-align:center;line-height:1.25}
 .choice span{font-size:clamp(14px,2vw,17px);color:var(--muted)}
 .choice.a{background:linear-gradient(160deg,var(--paper),var(--sage))}
 .choice.b{background:linear-gradient(160deg,var(--paper),#cfe6ea)}
 .choice.c{background:linear-gradient(160deg,var(--paper),var(--pink))}
-@media (max-width:760px){.choices{grid-template-columns:1fr;max-width:300px}.choice{aspect-ratio:auto;padding:26px 16px}}
+#music{position:fixed;top:14px;right:14px;z-index:10;display:flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:10px 18px;
+  font:inherit;font-size:17px;cursor:pointer;background:#fff;color:var(--ink);box-shadow:0 4px 14px rgba(58,51,48,.15)}
+#music .note{display:inline-block;font-size:20px}
+#music.on{background:var(--red);color:#fff}
+#music.on .note{animation:bob 1s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px) rotate(-10deg)}}
+@media (max-width:760px){body{padding-top:76px}#music{font-size:15px;padding:8px 14px}.choices{grid-template-columns:1fr;max-width:300px}.choice{aspect-ratio:auto;padding:26px 16px}}
 </style>
 </head>
 <body>
+  <button id="music" aria-pressed="false" title="背景音樂開／關"><span class="note">♪</span><span id="mLabel">播放音樂</span></button>
   <h1>南台灣<br>特教<span class="sun">小太陽</span></h1>
   <p class="who">台南市東區裕文國小　王峯文</p>
   <nav class="choices">
@@ -39,5 +46,54 @@ h1 .sun{color:var(--red)}
     <a class="choice b" href="gems.html"><div class="ic">💎</div><b>寶石鑑定室</b></a>
     <a class="choice c" href="possibilities.html"><div class="ic">🌱</div><b>資源班的<br>N種可能</b></a>
   </nav>
+<script>
+/* 背景音樂：以 Web Audio 即時合成的輕快旋律（原創，無版權問題） */
+(function(){
+  const KEY='home-music';let ctx=null,master=null,timer=null,next=0,step=0,on=false;
+  const BPM=104,S=60/BPM/2; // 八分音符
+  const f=n=>440*Math.pow(2,(n-69)/12);
+  // 旋律（MIDI 音高，0=休止），每格一個八分音符，共 64 格（8 小節）
+  const MEL=[72,0,76,79,81,79,76,0, 74,0,77,81,79,77,74,0, 72,0,76,79,84,83,81,79, 77,0,76,0,74,0,0,0,
+             76,0,79,84,83,81,79,0, 77,0,81,84,83,81,77,0, 76,79,81,79,76,74,72,74, 72,0,0,0,79,0,0,0];
+  // 和弦根音（每小節）：C Dm Am F / C F G C
+  const CH=[[48,55,64],[50,57,65],[45,52,60],[41,48,57],[48,55,64],[41,48,57],[43,50,59],[48,55,64]];
+  function tone(t,freq,dur,type,vol,attack){
+    const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.value=freq;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+attack);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g);g.connect(master);o.start(t);o.stop(t+dur+0.05);
+  }
+  function schedule(){
+    while(next<ctx.currentTime+0.3){
+      const i=step%64,bar=Math.floor(i/8);
+      if(MEL[i]){tone(next,f(MEL[i]),S*1.8,'triangle',0.16,0.01);tone(next,f(MEL[i]+12),S*0.9,'sine',0.04,0.005)}
+      if(i%8===0) CH[bar].forEach(n=>tone(next,f(n),S*7.5,'sine',0.05,0.08));
+      if(i%2===0) tone(next,f(CH[bar][0]-12),S*1.2,'sine',0.09,0.01);
+      if(i%4===2){const nz=ctx.createBufferSource(),b=ctx.createBuffer(1,ctx.sampleRate*0.05,ctx.sampleRate),d=b.getChannelData(0);
+        for(let k=0;k<d.length;k++)d[k]=(Math.random()*2-1)*(1-k/d.length);
+        const hp=ctx.createBiquadFilter(),g=ctx.createGain();hp.type='highpass';hp.frequency.value=6000;g.gain.value=0.05;
+        nz.buffer=b;nz.connect(hp);hp.connect(g);g.connect(master);nz.start(next)}
+      next+=S;step++;
+    }
+  }
+  function start(){
+    try{
+      if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=0;master.connect(ctx.destination)}
+      ctx.resume();master.gain.cancelScheduledValues(ctx.currentTime);master.gain.linearRampToValueAtTime(0.8,ctx.currentTime+1);
+      next=ctx.currentTime+0.1;step=0;clearInterval(timer);timer=setInterval(schedule,100);on=true;ui();
+    }catch(e){}
+  }
+  function stop(){
+    if(!ctx)return;master.gain.cancelScheduledValues(ctx.currentTime);master.gain.linearRampToValueAtTime(0,ctx.currentTime+0.3);
+    setTimeout(()=>clearInterval(timer),350);on=false;ui();
+  }
+  const btn=document.getElementById('music');
+  function ui(){btn.classList.toggle('on',on);btn.setAttribute('aria-pressed',on);document.getElementById('mLabel').textContent=on?'音樂播放中':'播放音樂'}
+  btn.addEventListener('click',e=>{e.stopPropagation();if(on){stop();try{localStorage.setItem(KEY,'off')}catch(_){}}else{start();try{localStorage.setItem(KEY,'on')}catch(_){}}});
+  // 之前開過音樂：瀏覽器規定要先有一次點擊才能發聲，所以在第一次觸碰畫面時自動接續播放
+  let pref=null;try{pref=localStorage.getItem(KEY)}catch(_){}
+  if(pref==='on'){const go=e=>{if(!e.target.closest('#music')&&!e.target.closest('a'))start();removeEventListener('pointerdown',go)};addEventListener('pointerdown',go)}
+  document.addEventListener('visibilitychange',()=>{if(!ctx)return;document.hidden?ctx.suspend():(on&&ctx.resume())});
+})();
+</script>
 </body>
 </html>

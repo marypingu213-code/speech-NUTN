@@ -5,95 +5,116 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>資源班的N種可能</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
 <style>
-:root{--cream:#f8f2e4;--paper:#fffaf0;--pink:#ecc7bd;--sage:#d9e3c5;--ink:#3a3330;--red:#c0392b;--muted:#7d716a;--line:rgba(58,51,48,.14)}
+:root{--cream:#f8f2e4;--paper:#fffaf0;--pink:#ecc7bd;--ink:#3a3330;--red:#c0392b;--muted:#7d716a;--label:#6b4226;--line:rgba(58,51,48,.14)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;background:var(--cream);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif}
+html,body{height:100%}
+body{background:var(--cream);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+body.scroll{overflow:auto;height:auto;min-height:100%}
 button{font:inherit;color:inherit}
-header{position:sticky;top:0;z-index:20;background:rgba(248,242,228,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
-.hwrap{max-width:1400px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-h1{font-family:"Noto Serif TC",serif;font-size:clamp(22px,3.4vw,34px);color:var(--red);letter-spacing:.06em}
-.count{color:var(--muted);font-size:15px}
+header{flex:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid var(--line);background:rgba(248,242,228,.96);flex-wrap:wrap}
+h1{font-family:"Noto Serif TC",serif;font-size:clamp(20px,2.4vw,32px);color:var(--red);letter-spacing:.06em;white-space:nowrap}
+.count{color:var(--muted);font-size:14px;white-space:nowrap}
 .sp{flex:1}
-.btn{border:0;border-radius:999px;padding:11px 22px;font-size:18px;font-weight:700;cursor:pointer;background:var(--red);color:#fff;box-shadow:0 4px 12px rgba(192,57,43,.25);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
-.btn.ghost{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(58,51,48,.12);font-size:15px;padding:9px 16px}
-main{max-width:1400px;margin:0 auto;padding:18px 16px 40px}
-h2{font-size:17px;color:var(--muted);margin:18px 0 10px;font-weight:700;letter-spacing:.1em}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
-.act{position:relative;background:#fff;border-radius:16px;padding:10px;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;
-  box-shadow:0 3px 10px rgba(58,51,48,.1);border:3px solid transparent;cursor:pointer;text-decoration:none;transition:transform .15s,border-color .15s,box-shadow .15s}
-.act:hover,.act:focus-visible{transform:translateY(-3px);border-color:var(--pink);box-shadow:0 8px 20px rgba(58,51,48,.16);outline:none}
+.btn{border:0;border-radius:999px;padding:9px 20px;font-size:17px;font-weight:700;cursor:pointer;background:var(--red);color:#fff;box-shadow:0 4px 12px rgba(192,57,43,.25);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(58,51,48,.12);font-size:14px;padding:7px 14px}
+#board{flex:1;min-height:0;display:grid;gap:var(--gap,8px);padding:var(--gap,8px)}
+body.scroll #board{flex:none}
+.act{position:relative;background:#fff;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;min-height:0;
+  padding:6% 4% 4%;box-shadow:0 2px 8px rgba(58,51,48,.1);border:3px solid transparent;cursor:pointer;text-decoration:none;color:var(--label);
+  transition:transform .15s,border-color .15s,box-shadow .15s;animation:in .5s cubic-bezier(.3,1.5,.5,1) both;animation-delay:calc(var(--i)*12ms)}
+@keyframes in{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+.act:hover,.act:focus-visible{transform:scale(1.05);border-color:var(--pink);box-shadow:0 8px 20px rgba(58,51,48,.18);outline:none;z-index:3}
+.act .pic{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}
 .act img{max-width:100%;max-height:100%;object-fit:contain;display:block}
-.act .no{position:absolute;left:6px;top:6px;background:var(--cream);color:var(--muted);font-size:12px;font-weight:700;border-radius:999px;padding:1px 8px}
-.act.seen::after{content:"✓";position:absolute;right:6px;top:6px;width:22px;height:22px;border-radius:50%;background:#3c8d5a;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center}
-.act.hot{border-color:var(--red);transform:scale(1.06);box-shadow:0 10px 26px rgba(192,57,43,.3);z-index:2}
-.foot{margin-top:28px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-#pick{position:fixed;inset:0;background:rgba(30,26,24,.8);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
+.act .lb{flex:none;margin-top:4%;font-family:"LXGW WenKai TC","Noto Sans TC",sans-serif;font-weight:700;font-size:var(--fs,15px);line-height:1.2;text-align:center;white-space:pre-line;height:2.4em;display:flex;align-items:center}
+.act .no{position:absolute;left:5px;top:4px;color:#b5aaa2;font-size:calc(var(--fs,15px)*.62);font-weight:700}
+.act.seen::after{content:"✓";position:absolute;right:5px;top:5px;width:1.5em;height:1.5em;border-radius:50%;background:#3c8d5a;color:#fff;font-size:calc(var(--fs,15px)*.7);display:flex;align-items:center;justify-content:center}
+.act.hot{border-color:var(--red);transform:scale(1.15);box-shadow:0 12px 30px rgba(192,57,43,.35);z-index:4}
+#pick{position:fixed;inset:0;background:rgba(30,26,24,.82);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
 #pick.hidden{display:none}
-.pbox{background:var(--paper);border-radius:26px;padding:26px;width:min(460px,100%);text-align:center;display:flex;flex-direction:column;gap:18px;align-items:center;animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+.pbox{background:var(--paper);border-radius:28px;padding:28px;width:min(520px,100%);text-align:center;display:flex;flex-direction:column;gap:16px;align-items:center;animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
-.pbox .lb{font-size:16px;color:var(--muted)}
-.pbox img{width:min(300px,78vw);height:auto;max-height:46vh;object-fit:contain;background:#fff;border-radius:16px;padding:12px}
+.pbox .t{font-size:16px;color:var(--muted)}
+.pbox img{width:min(300px,70vw);height:min(260px,40vh);object-fit:contain;background:#fff;border-radius:18px;padding:14px}
+.pbox .nm{font-family:"LXGW WenKai TC","Noto Sans TC",sans-serif;font-weight:700;font-size:clamp(28px,5vw,40px);color:var(--label);white-space:pre-line;line-height:1.25}
 .pbox .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-@media (max-width:600px){.grid{grid-template-columns:repeat(3,1fr);gap:8px}.act{padding:6px;border-radius:12px}.btn{font-size:16px;padding:9px 16px}}
 </style>
 </head>
 <body>
-<header><div class="hwrap">
+<header>
   <h1>資源班的N種可能</h1><span class="count" id="count"></span>
   <span class="sp"></span>
   <button class="btn" id="bRand">🎲 隨機抽一個</button>
+  <a class="btn ghost" href="talk.html?a=end">結尾</a>
+  <button class="btn ghost" id="bReset" title="清除已看過的勾勾">清除 ✓</button>
   <a class="btn ghost" href="index.html">首頁</a>
-</div></header>
-<main id="main"></main>
+</header>
+<main id="board"></main>
 <div id="pick" class="hidden"><div class="pbox">
-  <div class="lb" id="pLb">抽到了！</div>
+  <div class="t" id="pT">抽到了！</div>
   <img id="pImg" alt="">
+  <div class="nm" id="pNm"></div>
   <div class="row"><a class="btn" id="pGo">開始 ▶</a><button class="btn ghost" id="pAgain">再抽一次</button><button class="btn ghost" id="pClose">關閉</button></div>
 </div></div>
 <script>
-const ACTS = [{"n": 1, "label": "麋鹿打卡", "img": "img/acts/01.jpg", "t": 1}, {"n": 2, "label": "國語文競賽", "img": "img/acts/02.jpg", "t": 1}, {"n": 3, "label": "動畫阿虎\n危險地圖", "img": "img/acts/03.jpg", "t": 1}, {"n": 4, "label": "送老師\n教師節紅筆", "img": "img/acts/04.jpg", "t": 1}, {"n": 5, "label": "獎勵品\n衛生紙", "img": "img/acts/05.jpg", "t": 1}, {"n": 6, "label": "復興國小", "img": "img/acts/06.jpg", "t": 1}, {"n": 7, "label": "暑假報導", "img": "img/acts/07.jpg", "t": 1}, {"n": 8, "label": "永福國小", "img": "img/acts/08.jpg", "t": 1}, {"n": 9, "label": "教室佈置\n點字鏡面字", "img": "img/acts/09.jpg", "t": 1}, {"n": 10, "label": "空拍機", "img": "img/acts/10.jpg", "t": 1}, {"n": 11, "label": "裕文圖書館\n為愛朗讀", "img": "img/acts/11.jpg", "t": 1}, {"n": 12, "label": "七股國小", "img": "img/acts/12.jpg", "t": 1}, {"n": 13, "label": "雲林光復", "img": "img/acts/13.jpg", "t": 1}, {"n": 14, "label": "獎勵品\n拍立得", "img": "img/acts/14.jpg", "t": 1}, {"n": 15, "label": "ATM教學", "img": "img/acts/15.jpg", "t": 1}, {"n": 16, "label": "新聞轉播", "img": "img/acts/16.jpg", "t": 1}, {"n": 17, "label": "跳蚤市場\n義賣", "img": "img/acts/17.jpg", "t": 2}, {"n": 18, "label": "巧克力DIY", "img": "img/acts/18.jpg", "t": 2}, {"n": 19, "label": "黏土創作", "img": "img/acts/19.jpg", "t": 2}, {"n": 20, "label": "京城銀行\n晉發碾米廠", "img": "img/acts/20.jpg", "t": 2}, {"n": 21, "label": "安平古堡", "img": "img/acts/21.jpg", "t": 2}, {"n": 22, "label": "教育部\n特殊優良教師", "img": "img/acts/22.jpg", "t": 2}, {"n": 23, "label": "教室佈置\n花燈創作", "img": "img/acts/23.jpg", "t": 2}, {"n": 24, "label": "教室布置\n最美的風景", "img": "img/acts/24.jpg", "t": 2}, {"n": 25, "label": "親子天下\n教育創新", "img": "img/acts/25.jpg", "t": 2}, {"n": 26, "label": "海安普濟殿", "img": "img/acts/26.jpg", "t": 2}, {"n": 27, "label": "安平軍艦", "img": "img/acts/27.jpg", "t": 2}, {"n": 28, "label": "雙層巴士", "img": "img/acts/28.jpg", "t": 2}, {"n": 29, "label": "櫥窗故事", "img": "img/acts/29.jpg", "t": 2}, {"n": 30, "label": "教室佈置\n水管寶可夢", "img": "img/acts/30.jpg", "t": 2}, {"n": 31, "label": "實境解謎\n密室逃脫", "img": "img/acts/31.jpg", "t": 2}, {"n": 32, "label": "鬆餅教學", "img": "img/acts/32.jpg", "t": 2}, {"n": 33, "label": "Micro bit\nScratch", "img": "img/acts/33.jpg", "t": 3}, {"n": 34, "label": "活動存摺", "img": "img/acts/34.jpg", "t": 3}, {"n": 35, "label": "高雄IKEA", "img": "img/acts/35.jpg", "t": 3}, {"n": 36, "label": "教室布置\n暑假卷軸畫", "img": "img/acts/36.jpg", "t": 3}, {"n": 37, "label": "大同國小\n長榮桂冠", "img": "img/acts/37.jpg", "t": 3}, {"n": 38, "label": "新化\n果菜市場", "img": "img/acts/38.jpg", "t": 3}, {"n": 39, "label": "新化圖書館", "img": "img/acts/39.jpg", "t": 3}, {"n": 40, "label": "水道博物館", "img": "img/acts/40.jpg", "t": 3}, {"n": 41, "label": "永福\n蝴蝶彩繪", "img": "img/acts/41.jpg", "t": 3}, {"n": 42, "label": "鹽水", "img": "img/acts/42.jpg", "t": 3}, {"n": 43, "label": "南紡買衣服", "img": "img/acts/43.jpg", "t": 3}, {"n": 44, "label": "九乘九文具", "img": "img/acts/44.jpg", "t": 3}, {"n": 45, "label": "i(愛)郵箱", "img": "img/acts/45.jpg", "t": 3}, {"n": 46, "label": "教室佈置\n鋁條", "img": "img/acts/46.jpg", "t": 3}, {"n": 47, "label": "視訊連線\nCOVID-19防疫", "img": "img/acts/47.jpg", "t": 3}, {"n": 48, "label": "教室布置\n飄飄燈管條", "img": "img/acts/48.jpg", "t": 3}, {"n": 49, "label": "太陰星君", "img": "img/acts/49.jpg", "t": 4}, {"n": 50, "label": "成語牆", "img": "img/acts/50.jpg", "t": 4}, {"n": 51, "label": "南紡資訊月", "img": "img/acts/51.jpg", "t": 4}, {"n": 52, "label": "成大野餐", "img": "img/acts/52.jpg", "t": 4}, {"n": 53, "label": "馬雅各/摺紙", "img": "img/acts/53.jpg", "t": 4}, {"n": 54, "label": "母親節插花", "img": "img/acts/54.jpg", "t": 4}, {"n": 55, "label": "線上學習", "img": "img/acts/55.jpg", "t": 4}, {"n": 56, "label": "總圖/烘焙DIY\n特色7-11", "img": "img/acts/56.jpg", "t": 4}, {"n": 57, "label": "數位大電視", "img": "img/acts/57.jpg", "t": 4}, {"n": 58, "label": "旗津駁二", "img": "img/acts/58.jpg", "t": 4}, {"n": 59, "label": "林業鐵道", "img": "img/acts/59.jpg", "t": 4}, {"n": 60, "label": "文化共融", "img": "img/acts/60.jpg", "t": 4}, {"n": 61, "label": "九曲堂\n鳳梨.鐵橋", "img": "img/acts/61.jpg", "t": 4}, {"n": 62, "label": "隆田CHACHA\n教育園區", "img": "img/acts/62.jpg", "t": 4}, {"n": 63, "label": "十鼓文化園區", "img": "img/acts/63.jpg", "t": 4}, {"n": 64, "label": "第二兒發\n蒞校參觀", "img": "img/acts/64.jpg", "t": 4}, {"n": 65, "label": "故宮南院", "img": "img/acts/65.jpg", "t": 5}, {"n": 66, "label": "娉茵鋒昀\n大三見習", "img": "img/acts/66.jpg", "t": 5}, {"n": 67, "label": "學習提袋", "img": "img/acts/67.jpg", "t": 5}, {"n": 68, "label": "Anping共融\n洋行新展", "img": "img/acts/68.jpg", "t": 5}, {"n": 69, "label": "書營之間\n兩全皆美", "img": "img/acts/69.jpg", "t": 5}, {"n": 70, "label": "增Resource\n設 one clsss", "img": "img/acts/70.jpg", "t": 5}, {"n": 71, "label": "綁烤拼曬\n生命壯遊", "img": "img/acts/71.jpg", "t": 5}, {"n": 72, "label": "市區街屋\n梅漢虎拜", "img": "img/acts/72.jpg", "t": 5}, {"n": 73, "label": "官田西拉雅\n南藝清水模", "img": "img/acts/73.jpg", "t": 5}];
-const TABLES=['年表一','年表二','年表三','年表四','年表五'];
+const ACTS = [{"n": 1, "label": "麋鹿打卡", "img": "img/acts/01.png"}, {"n": 2, "label": "國語文競賽", "img": "img/acts/02.png"}, {"n": 3, "label": "動畫阿虎\n危險地圖", "img": "img/acts/03.png"}, {"n": 4, "label": "教師節\n送導師紅筆", "img": "img/acts/04.png"}, {"n": 5, "label": "獎勵品\n衛生紙", "img": "img/acts/05.png"}, {"n": 6, "label": "復興國小", "img": "img/acts/06.png"}, {"n": 7, "label": "暑假報導", "img": "img/acts/07.png"}, {"n": 8, "label": "永福國小", "img": "img/acts/08.png"}, {"n": 9, "label": "教室佈置\n點字鏡面字", "img": "img/acts/09.png"}, {"n": 10, "label": "空拍機", "img": "img/acts/10.png"}, {"n": 11, "label": "裕文圖書館\n為愛朗讀", "img": "img/acts/11.png"}, {"n": 12, "label": "七股國小", "img": "img/acts/12.png"}, {"n": 13, "label": "雲林光復", "img": "img/acts/13.png"}, {"n": 14, "label": "獎勵品\n拍立得", "img": "img/acts/14.png"}, {"n": 15, "label": "ATM教學", "img": "img/acts/15.png"}, {"n": 16, "label": "新聞轉播", "img": "img/acts/16.png"}, {"n": 17, "label": "跳蚤市場\n義賣", "img": "img/acts/17.png"}, {"n": 18, "label": "巧克力DIY", "img": "img/acts/18.png"}, {"n": 19, "label": "黏土創作", "img": "img/acts/19.png"}, {"n": 20, "label": "京城銀行\n晉發碾米廠", "img": "img/acts/20.png"}, {"n": 21, "label": "安平古堡", "img": "img/acts/21.png"}, {"n": 22, "label": "教育部\n特殊優良教師", "img": "img/acts/22.png"}, {"n": 23, "label": "教室佈置\n花燈創作", "img": "img/acts/23.png"}, {"n": 24, "label": "教室布置\n最美的風景", "img": "img/acts/24.png"}, {"n": 25, "label": "親子天下\n教育創新", "img": "img/acts/25.png"}, {"n": 26, "label": "海安普濟殿", "img": "img/acts/26.png"}, {"n": 27, "label": "安平軍艦", "img": "img/acts/27.png"}, {"n": 28, "label": "雙層巴士", "img": "img/acts/28.png"}, {"n": 29, "label": "櫥窗故事", "img": "img/acts/29.png"}, {"n": 30, "label": "教室佈置\n水管寶可夢", "img": "img/acts/30.png"}, {"n": 31, "label": "實境解謎\n密室逃脫", "img": "img/acts/31.png"}, {"n": 32, "label": "鬆餅教學", "img": "img/acts/32.png"}, {"n": 33, "label": "Micro bit\nScratch", "img": "img/acts/33.png"}, {"n": 34, "label": "活動存摺", "img": "img/acts/34.png"}, {"n": 35, "label": "高雄IKEA", "img": "img/acts/35.png"}, {"n": 36, "label": "教室布置\n暑假卷軸畫", "img": "img/acts/36.png"}, {"n": 37, "label": "大同國小\n長榮桂冠", "img": "img/acts/37.png"}, {"n": 38, "label": "新化\n果菜市場", "img": "img/acts/38.png"}, {"n": 39, "label": "新化圖書館", "img": "img/acts/39.png"}, {"n": 40, "label": "水道博物館", "img": "img/acts/40.png"}, {"n": 41, "label": "永福\n蝴蝶彩繪", "img": "img/acts/41.png"}, {"n": 42, "label": "鹽水", "img": "img/acts/42.png"}, {"n": 43, "label": "南紡買衣服", "img": "img/acts/43.png"}, {"n": 44, "label": "九乘九文具", "img": "img/acts/44.png"}, {"n": 45, "label": "i(愛)郵箱", "img": "img/acts/45.png"}, {"n": 46, "label": "教室佈置\n鋁條", "img": "img/acts/46.png"}, {"n": 47, "label": "視訊連線\nCOVID-19防疫", "img": "img/acts/47.png"}, {"n": 48, "label": "教室布置\n飄飄燈管條", "img": "img/acts/48.png"}, {"n": 49, "label": "太陰星君", "img": "img/acts/49.png"}, {"n": 50, "label": "成語牆", "img": "img/acts/50.png"}, {"n": 51, "label": "南紡資訊月", "img": "img/acts/51.png"}, {"n": 52, "label": "成大野餐", "img": "img/acts/52.png"}, {"n": 53, "label": "馬雅各/摺紙", "img": "img/acts/53.png"}, {"n": 54, "label": "母親節插花", "img": "img/acts/54.png"}, {"n": 55, "label": "線上學習", "img": "img/acts/55.png"}, {"n": 56, "label": "總圖/烘焙DIY\n特色7-11", "img": "img/acts/56.png"}, {"n": 57, "label": "數位大電視", "img": "img/acts/57.png"}, {"n": 58, "label": "旗津駁二", "img": "img/acts/58.png"}, {"n": 59, "label": "林業鐵道", "img": "img/acts/59.png"}, {"n": 60, "label": "文化共融", "img": "img/acts/60.png"}, {"n": 61, "label": "九曲堂\n鳳梨.鐵橋", "img": "img/acts/61.png"}, {"n": 62, "label": "隆田CHACHA\n教育園區", "img": "img/acts/62.png"}, {"n": 63, "label": "十鼓文化園區", "img": "img/acts/63.png"}, {"n": 64, "label": "第二兒發\n蒞校參觀", "img": "img/acts/64.png"}, {"n": 65, "label": "故宮南院", "img": "img/acts/65.png"}, {"n": 66, "label": "娉茵鋒昀\n大三見習", "img": "img/acts/66.png"}, {"n": 67, "label": "學習提袋", "img": "img/acts/67.png"}, {"n": 68, "label": "Anping共融\n洋行新展", "img": "img/acts/68.png"}, {"n": 69, "label": "書營之間\n兩全皆美", "img": "img/acts/69.png"}, {"n": 70, "label": "增Resource\n設 one clsss", "img": "img/acts/70.png"}, {"n": 71, "label": "綁烤拼曬\n生命壯遊", "img": "img/acts/71.png"}, {"n": 72, "label": "市區街屋\n梅漢虎拜", "img": "img/acts/72.png"}, {"n": 73, "label": "官田西拉雅\n南藝清水模", "img": "img/acts/73.png"}];
 const $=id=>document.getElementById(id);
+const one=s=>s.replace(/\n/g,' ');
 function visited(){try{return JSON.parse(localStorage.getItem('acts-visited')||'[]')}catch(e){return[]}}
-function render(){
-  const v=visited(),main=$('main');main.innerHTML='';
-  TABLES.forEach((t,ti)=>{
-    const h=document.createElement('h2');h.textContent=t;main.appendChild(h);
-    const g=document.createElement('div');g.className='grid';
-    ACTS.filter(a=>a.t===ti+1).forEach(a=>{
-      const el=document.createElement('a');el.className='act'+(v.includes(a.n)?' seen':'');el.href='talk.html?a='+a.n;el.dataset.n=a.n;
-      el.setAttribute('aria-label',a.label.replace(/\n/g,' '));el.title=a.label.replace(/\n/g,' ');
-      const im=document.createElement('img');im.src=a.img;im.alt=a.label.replace(/\n/g,' ');im.loading='lazy';
-      const no=document.createElement('span');no.className='no';no.textContent=a.n;
-      el.append(im,no);g.appendChild(el)});
-    main.appendChild(g)});
-  const f=document.createElement('div');f.className='foot';
-  f.innerHTML='<a class="btn ghost" href="talk.html?a=end">結尾・THANKS</a><button class="btn ghost" id="bReset">清除「看過」記號</button>';
-  main.appendChild(f);
-  $('bReset').onclick=()=>{try{localStorage.removeItem('acts-visited')}catch(e){};render()};
-  $('count').textContent=`共 ${ACTS.length} 個活動・已看 ${v.filter(n=>n>=1&&n<=ACTS.length).length} 個`;
+function build(){
+  const b=$('board');b.innerHTML='';const v=visited();
+  ACTS.forEach((a,i)=>{
+    const el=document.createElement('a');el.className='act'+(v.includes(a.n)?' seen':'');el.href='talk.html?a='+a.n;el.dataset.n=a.n;el.style.setProperty('--i',i);
+    el.title=one(a.label);
+    const pic=document.createElement('div');pic.className='pic';const im=document.createElement('img');im.src=a.img;im.alt='';pic.appendChild(im);
+    const lb=document.createElement('div');lb.className='lb';lb.textContent=a.label;
+    const no=document.createElement('span');no.className='no';no.textContent=a.n;
+    el.append(no,pic,lb);b.appendChild(el)});
+  $('count').textContent=`${ACTS.length} 個活動・已看 ${v.filter(n=>n>=1&&n<=ACTS.length).length}`;
+  layout();
 }
+// fit all 73 tiles on one screen
+function layout(){
+  const b=$('board'),hd=document.querySelector('header');
+  const W=innerWidth,H=innerHeight-hd.offsetHeight,N=ACTS.length;
+  let best=null;
+  for(let c=4;c<=16;c++){const r=Math.ceil(N/c),gap=Math.max(4,Math.min(10,W/c*0.06));
+    const cw=(W-gap*(c+1))/c,ch=(H-gap*(r+1))/r;const s=Math.min(cw,ch/1.05);
+    if(!best||s>best.s)best={c,r,gap,s,cw,ch}}
+  if(best.s<92){ // too small (phone): scroll mode
+    const c=W<500?3:W<800?4:6,gap=8,cw=(W-gap*(c+1))/c;
+    document.body.classList.add('scroll');
+    b.style.gridTemplateColumns=`repeat(${c},1fr)`;b.style.gridTemplateRows='';b.style.gridAutoRows=(cw*1.08)+'px';
+    b.style.setProperty('--gap',gap+'px');b.style.setProperty('--fs',Math.max(12,Math.min(18,cw*0.12))+'px');return}
+  document.body.classList.remove('scroll');
+  b.style.gridAutoRows='';
+  b.style.gridTemplateColumns=`repeat(${best.c},1fr)`;b.style.gridTemplateRows=`repeat(${best.r},1fr)`;
+  b.style.setProperty('--gap',best.gap+'px');
+  b.style.setProperty('--fs',Math.max(11,Math.min(26,Math.min(best.cw*0.13,best.ch*0.11)))+'px');
+}
+addEventListener('resize',layout);
 let rolling=false;
 function roll(){
   if(rolling)return;rolling=true;$('pick').classList.add('hidden');
   const v=visited();let pool=ACTS.filter(a=>!v.includes(a.n));if(!pool.length)pool=ACTS;
   const win=pool[Math.floor(Math.random()*pool.length)];
-  const tiles=[...document.querySelectorAll('.act')];let i=0,delay=60;const total=22;let prev=null;
+  const tiles=[...document.querySelectorAll('.act')];let i=0,delay=55,prev=null;const total=24;
   (function tick(){
     prev&&prev.classList.remove('hot');
     const el=i>=total?tiles.find(t=>+t.dataset.n===win.n):tiles[Math.floor(Math.random()*tiles.length)];
-    el.classList.add('hot');el.scrollIntoView({block:'nearest',behavior:'smooth'});prev=el;i++;
+    el.classList.add('hot');if(document.body.classList.contains('scroll'))el.scrollIntoView({block:'nearest'});prev=el;i++;
     if(i<=total){delay*=1.1;setTimeout(tick,delay);return}
     setTimeout(()=>{el.classList.remove('hot');rolling=false;
-      $('pImg').src=win.img;$('pImg').alt=win.label;$('pLb').textContent=`抽到了！第 ${win.n} 個活動`;
-      $('pGo').href='talk.html?a='+win.n;$('pick').classList.remove('hidden')},500)})();
+      $('pImg').src=win.img;$('pNm').textContent=win.label;$('pT').textContent=`抽到了！第 ${win.n} 個活動`;
+      $('pGo').href='talk.html?a='+win.n;$('pick').classList.remove('hidden')},600)})();
 }
 $('bRand').onclick=roll;$('pAgain').onclick=roll;
 $('pClose').onclick=()=>$('pick').classList.add('hidden');
-addEventListener('pageshow',render);
-render();
+$('bReset').onclick=()=>{try{localStorage.removeItem('acts-visited')}catch(e){};build()};
+addEventListener('pageshow',e=>{if(e.persisted)build()});
+build();
 </script>
 </body>
 </html>

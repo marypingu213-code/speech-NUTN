@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>南台灣特教小太陽</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Iansui&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/Iansui.woff2" as="font" type="font/woff2" crossorigin>
+<style>@font-face{font-family:"Iansui";src:url("fonts/Iansui.woff2") format("woff2");font-weight:100 900;font-display:block}</style>
 <style>
 :root{--cream:#f8f2e4;--paper:#fffaf0;--pink:#ecc7bd;--sage:#d9e3c5;--ink:#3a3330;--red:#c0392b;--muted:#7d716a}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -40,7 +40,6 @@ h1 .sun{color:var(--red)}
 <body>
   <button id="music" aria-pressed="false" title="背景音樂開／關"><span class="note">♪</span><span id="mLabel">播放音樂</span></button>
   <h1>南台灣<br>特教<span class="sun">小太陽</span></h1>
-  <p class="who">台南市東區裕文國小　王峯文</p>
   <nav class="choices">
     <a class="choice a" href="activity.html"><img class="ic ring" src="img/sdg-ring.svg" alt=""><b>OUR GOALS<br>挑戰配對</b></a>
     <a class="choice b" href="gems.html"><div class="ic">💎</div><b>寶石鑑定室</b></a>

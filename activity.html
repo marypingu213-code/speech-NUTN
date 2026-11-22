@@ -28,6 +28,9 @@ button,input{font:inherit;color:inherit}
 .btn.ghost{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(58,51,48,.12)}
 .err{color:var(--red);font-size:15px;min-height:1.2em;text-align:center}
 .home{color:var(--muted);font-size:15px;text-decoration:none}
+.links{display:flex;gap:28px;align-items:center}
+.home.teacher{border:1px solid var(--line);border-radius:999px;padding:5px 14px;background:#fff}
+.home:hover{color:var(--red)}
 
 /* play */
 header{position:sticky;top:0;z-index:20;background:rgba(248,242,228,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);
@@ -99,7 +102,7 @@ dialog .row{display:flex;gap:10px;justify-content:center}
     <button class="btn" type="submit">開始作答</button>
     <div class="err" id="loginErr"></div>
   </form>
-  <a class="home" href="index.html">← 回首頁</a>
+  <div class="links"><a class="home" href="index.html">← 回首頁</a><a class="home teacher" href="teacher.html">講師入口</a></div>
 </section>
 
 <section id="play" class="hidden">

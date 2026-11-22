@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>資源班的N種可能</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Iansui&display=swap" rel="stylesheet">
 <style>
 :root{
   --cream:#f8f2e4; --paper:#fffaf0; --pink:#ecc7bd; --sage:#d9e3c5; --blue:#c8d4de; --sand:#f1e3bf;
   --ink:#3a3330; --red:#c0392b; --muted:#7d716a; --line:rgba(58,51,48,.12);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#2b2724;overflow:hidden;font-family:"Noto Sans TC",system-ui,sans-serif;color:var(--ink)}
+html,body{height:100%;background:#2b2724;overflow:hidden;font-family:"Iansui",system-ui,sans-serif;color:var(--ink)}
 #viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
 #stage{width:1600px;height:900px;position:relative;transform-origin:center center;flex:none;overflow:hidden;background:var(--cream);box-shadow:0 10px 60px rgba(0,0,0,.4)}
 .slide{position:absolute;inset:0;opacity:0;transition:opacity .45s ease;pointer-events:none}
@@ -24,7 +24,7 @@ html,body{height:100%;background:#2b2724;overflow:hidden;font-family:"Noto Sans 
 /* header */
 .hd{position:absolute;left:44px;top:30px;right:44px;height:92px;display:flex;align-items:center;gap:18px}
 .hd .ic{height:84px;width:auto;max-width:150px;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(0,0,0,.08))}
-.hd h2{font-family:"Noto Serif TC",serif;font-weight:900;font-size:46px;color:var(--red);letter-spacing:.06em;line-height:1.15;white-space:pre-line}
+.hd h2{font-family:"Iansui",system-ui,sans-serif;font-weight:900;font-size:46px;color:var(--red);letter-spacing:.06em;line-height:1.15;white-space:pre-line}
 .hd .no{margin-left:auto;font-size:18px;color:var(--muted);letter-spacing:.1em;align-self:flex-start;padding-top:12px}
 .hd h2:empty{display:none}
 .hd h2.two{font-size:36px}
@@ -44,9 +44,9 @@ html,body{height:100%;background:#2b2724;overflow:hidden;font-family:"Noto Sans 
 
 /* cover */
 .cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.cover h1{font-family:"Noto Serif TC",serif;font-weight:900;font-size:150px;line-height:1.1;text-align:center;letter-spacing:.05em}
-.cover h1 .n{color:var(--red);font-family:"Noto Sans TC";font-weight:900;font-size:160px;display:inline-block;transform:translateY(14px) rotate(-6deg);margin:0 6px}
-.cover .who{margin-top:56px;font-family:"Noto Serif TC",serif;font-size:38px;text-align:center;line-height:1.5;color:#4b423d}
+.cover h1{font-family:"Iansui",system-ui,sans-serif;font-weight:900;font-size:150px;line-height:1.1;text-align:center;letter-spacing:.05em}
+.cover h1 .n{color:var(--red);font-family:"Iansui",system-ui,sans-serif;font-weight:900;font-size:160px;display:inline-block;transform:translateY(14px) rotate(-6deg);margin:0 6px}
+.cover .who{margin-top:56px;font-family:"Iansui",system-ui,sans-serif;font-size:38px;text-align:center;line-height:1.5;color:#4b423d}
 .cover .tag{margin-top:24px;font-size:20px;letter-spacing:.4em;color:var(--muted)}
 
 /* goals */
@@ -64,17 +64,17 @@ html,body{height:100%;background:#2b2724;overflow:hidden;font-family:"Noto Sans 
 /* picture-book pages */
 .book{position:absolute;inset:34px 60px;display:flex;align-items:center;justify-content:center}
 .book img{max-width:100%;max-height:100%;border-radius:8px;box-shadow:0 14px 40px rgba(0,0,0,.25)}
-.book-title{position:absolute;left:44px;top:34px;font-family:"Noto Serif TC";font-weight:900;font-size:46px;color:var(--red);z-index:3}
+.book-title{position:absolute;left:44px;top:34px;font-family:"Iansui",system-ui,sans-serif;font-weight:900;font-size:46px;color:var(--red);z-index:3}
 .burst{position:absolute;z-index:3;width:440px;height:330px;display:flex;align-items:center;justify-content:center;
   clip-path:polygon(50% 0%,58% 22%,78% 6%,72% 30%,98% 24%,80% 44%,100% 58%,76% 62%,88% 88%,64% 74%,56% 100%,46% 78%,26% 96%,30% 70%,2% 78%,20% 56%,0% 38%,24% 34%,12% 8%,38% 22%);
   background:var(--red);animation:pop .6s cubic-bezier(.3,1.6,.5,1) both}
 .burst::before{content:"";position:absolute;inset:7px;background:#fff;clip-path:inherit}
-.burst b{position:relative;font-family:"Noto Serif TC";font-size:46px;color:var(--red);white-space:pre-line;text-align:center;line-height:1.3}
+.burst b{position:relative;font-family:"Iansui",system-ui,sans-serif;font-size:46px;color:var(--red);white-space:pre-line;text-align:center;line-height:1.3}
 @keyframes pop{from{transform:scale(.3) rotate(-10deg);opacity:0}to{transform:none;opacity:1}}
 
 /* topic map */
 .map{position:absolute;inset:0}
-.bub{position:absolute;transform:translate(-50%,-50%);border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:"Noto Serif TC";font-weight:900;color:var(--ink);box-shadow:0 8px 24px rgba(58,51,48,.12);border:4px solid #fff}
+.bub{position:absolute;transform:translate(-50%,-50%);border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:"Iansui",system-ui,sans-serif;font-weight:900;color:var(--ink);box-shadow:0 8px 24px rgba(58,51,48,.12);border:4px solid #fff}
 .map .center{font-size:40px;color:#fff;background:var(--red)}
 
 /* list */
@@ -94,7 +94,7 @@ html,body{height:100%;background:#2b2724;overflow:hidden;font-family:"Noto Sans 
 
 /* thanks */
 .thanks{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.thanks h1{font-family:"Noto Sans TC";font-weight:900;font-size:110px;line-height:1.15;text-align:center;letter-spacing:.03em}
+.thanks h1{font-family:"Iansui",system-ui,sans-serif;font-weight:900;font-size:110px;line-height:1.15;text-align:center;letter-spacing:.03em}
 .thanks .jd{margin-top:40px;font-size:66px;font-weight:900;font-style:italic;color:var(--red)}
 
 /* section card for empty slides */

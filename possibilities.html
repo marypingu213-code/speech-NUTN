@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>資源班的N種可能</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Iansui&display=swap" rel="stylesheet">
 <style>
 :root{--cream:#f8f2e4;--paper:#fffaf0;--pink:#ecc7bd;--ink:#3a3330;--red:#c0392b;--muted:#7d716a;--label:#6b4226;--line:rgba(58,51,48,.14)}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{background:var(--cream);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+body{background:var(--cream);color:var(--ink);font-family:"Iansui",system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
 body.scroll{overflow:auto;height:auto;min-height:100%}
 button{font:inherit;color:inherit}
 header{flex:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid var(--line);background:rgba(248,242,228,.96);flex-wrap:wrap}
-h1{font-family:"Noto Serif TC",serif;font-size:clamp(20px,2.4vw,32px);color:var(--red);letter-spacing:.06em;white-space:nowrap}
+h1{font-family:"Iansui",system-ui,sans-serif;font-size:clamp(20px,2.4vw,32px);color:var(--red);letter-spacing:.06em;white-space:nowrap}
 .count{color:var(--muted);font-size:14px;white-space:nowrap}
 .sp{flex:1}
 .btn{border:0;border-radius:999px;padding:9px 20px;font-size:17px;font-weight:700;cursor:pointer;background:var(--red);color:#fff;box-shadow:0 4px 12px rgba(192,57,43,.25);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
@@ -28,7 +28,7 @@ body.scroll #board{flex:none}
 .act:hover,.act:focus-visible{transform:scale(1.05);border-color:var(--pink);box-shadow:0 8px 20px rgba(58,51,48,.18);outline:none;z-index:3}
 .act .pic{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}
 .act img{max-width:100%;max-height:100%;object-fit:contain;display:block}
-.act .lb{flex:none;margin-top:4%;font-family:"LXGW WenKai TC","Noto Sans TC",sans-serif;font-weight:700;font-size:var(--fs,15px);line-height:1.2;text-align:center;white-space:pre-line;height:2.4em;display:flex;align-items:center}
+.act .lb{flex:none;margin-top:4%;font-family:"Iansui",system-ui,sans-serif;font-weight:700;font-size:var(--fs,15px);line-height:1.2;text-align:center;white-space:pre-line;height:2.4em;display:flex;align-items:center}
 .act .no{position:absolute;left:5px;top:4px;color:#b5aaa2;font-size:calc(var(--fs,15px)*.62);font-weight:700}
 .act.seen::after{content:"✓";position:absolute;right:5px;top:5px;width:1.5em;height:1.5em;border-radius:50%;background:#3c8d5a;color:#fff;font-size:calc(var(--fs,15px)*.7);display:flex;align-items:center;justify-content:center}
 .act.hot{border-color:var(--red);transform:scale(1.15);box-shadow:0 12px 30px rgba(192,57,43,.35);z-index:4}
@@ -38,7 +38,7 @@ body.scroll #board{flex:none}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
 .pbox .t{font-size:16px;color:var(--muted)}
 .pbox img{width:min(300px,70vw);height:min(260px,40vh);object-fit:contain;background:#fff;border-radius:18px;padding:14px}
-.pbox .nm{font-family:"LXGW WenKai TC","Noto Sans TC",sans-serif;font-weight:700;font-size:clamp(28px,5vw,40px);color:var(--label);white-space:pre-line;line-height:1.25}
+.pbox .nm{font-family:"Iansui",system-ui,sans-serif;font-weight:700;font-size:clamp(28px,5vw,40px);color:var(--label);white-space:pre-line;line-height:1.25}
 .pbox .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 </style>
 </head>

@@ -16,11 +16,12 @@ button,input{font:inherit;color:inherit}
 
 /* login */
 #login{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px;gap:22px}
-#login .banner{max-width:min(560px,100%);border-radius:12px;box-shadow:0 6px 18px rgba(58,51,48,.12)}
+#login .banner{max-width:min(560px,100%);height:auto}
 .card{background:var(--paper);border-radius:22px;padding:28px 26px;box-shadow:0 8px 24px rgba(58,51,48,.12);width:100%;max-width:400px;display:flex;flex-direction:column;gap:16px}
 .card h1{font-family:"Noto Serif TC",serif;color:var(--red);font-size:30px;text-align:center;letter-spacing:.08em}
 .card label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:16px}
 .card input{border:2px solid var(--line);border-radius:12px;padding:12px 14px;font-size:22px;background:#fff;letter-spacing:.08em}
+.card input::placeholder{font-size:16px;letter-spacing:0;color:#b5aaa2}
 .card input:focus{outline:none;border-color:var(--red)}
 .btn{border:0;border-radius:999px;padding:13px 26px;font-size:19px;font-weight:700;cursor:pointer;background:var(--red);color:#fff;box-shadow:0 4px 12px rgba(192,57,43,.25)}
 .btn:disabled{background:#c9bfb7;box-shadow:none;cursor:not-allowed}
@@ -86,11 +87,11 @@ dialog .row{display:flex;gap:10px;justify-content:center}
 <body>
 
 <section id="login">
-  <img class="banner" src="img/goals/banner.jpg" alt="OUR GOALS For Special Students">
+  <img class="banner" src="img/goals/banner.png" alt="OUR GOALS For Special Students">
   <form class="card" id="loginForm" autocomplete="off">
     <h1>目標配對挑戰</h1>
     <label>房間代碼（講師畫面上的數字）
-      <input id="inRoom" inputmode="numeric" maxlength="8" required>
+      <input id="inRoom" inputmode="numeric" maxlength="8" placeholder="看講師螢幕上的 4 位數字" required>
     </label>
     <label>你的學號
       <input id="inSid" maxlength="20" required>

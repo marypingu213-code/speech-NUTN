@@ -3,23 +3,329 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>活動</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+<title>OUR GOALS 配對</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
 <style>
-:root{--cream:#f8f2e4;--paper:#fffaf0;--ink:#3a3330;--red:#c0392b;--muted:#7d716a}
+:root{--cream:#f8f2e4;--paper:#fffaf0;--pink:#ecc7bd;--sage:#d9e3c5;--ink:#3a3330;--red:#c0392b;--muted:#7d716a;--line:rgba(58,51,48,.14);--ok:#3c8d5a}
 *{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;background:var(--cream);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:40px 16px;text-align:center}
-h1{font-family:"Noto Serif TC",serif;font-size:clamp(40px,8vw,72px);color:var(--red);letter-spacing:.15em}
-p{font-size:20px;color:var(--muted)}
-a{display:inline-block;margin-top:12px;padding:12px 28px;background:var(--paper);border-radius:999px;color:var(--ink);text-decoration:none;
-  box-shadow:0 4px 14px rgba(58,51,48,.12);font-size:18px}
-a:hover{color:var(--red)}
+html{-webkit-text-size-adjust:100%}
+body{min-height:100vh;background:var(--cream);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif}
+button,input{font:inherit;color:inherit}
+.hidden{display:none!important}
+
+/* login */
+#login{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px;gap:22px}
+#login .banner{max-width:min(560px,100%);border-radius:12px;box-shadow:0 6px 18px rgba(58,51,48,.12)}
+.card{background:var(--paper);border-radius:22px;padding:28px 26px;box-shadow:0 8px 24px rgba(58,51,48,.12);width:100%;max-width:400px;display:flex;flex-direction:column;gap:16px}
+.card h1{font-family:"Noto Serif TC",serif;color:var(--red);font-size:30px;text-align:center;letter-spacing:.08em}
+.card label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:16px}
+.card input{border:2px solid var(--line);border-radius:12px;padding:12px 14px;font-size:22px;background:#fff;letter-spacing:.08em}
+.card input:focus{outline:none;border-color:var(--red)}
+.btn{border:0;border-radius:999px;padding:13px 26px;font-size:19px;font-weight:700;cursor:pointer;background:var(--red);color:#fff;box-shadow:0 4px 12px rgba(192,57,43,.25)}
+.btn:disabled{background:#c9bfb7;box-shadow:none;cursor:not-allowed}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(58,51,48,.12)}
+.err{color:var(--red);font-size:15px;min-height:1.2em;text-align:center}
+.home{color:var(--muted);font-size:15px;text-decoration:none}
+
+/* play */
+header{position:sticky;top:0;z-index:20;background:rgba(248,242,228,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:12px;padding:10px 16px;flex-wrap:wrap}
+header .t{font-family:"Noto Serif TC",serif;color:var(--red);font-size:20px;letter-spacing:.05em}
+header .who{font-size:15px;background:#fff;border-radius:999px;padding:3px 12px}
+.net{font-size:13px;display:flex;align-items:center;gap:6px;color:var(--muted)}
+.net::before{content:"";width:9px;height:9px;border-radius:50%;background:#d1a23a}
+.net.on::before{background:var(--ok)} .net.off::before{background:var(--red)}
+header .sp{flex:1}
+.count{font-weight:700;font-size:15px}
+
+main{max-width:1280px;margin:0 auto;padding:16px 16px 0;display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}
+.hint{grid-column:1/-1;color:var(--muted);font-size:15px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.tile{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 3px 10px rgba(58,51,48,.12);display:flex;flex-direction:column}
+.tile img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.slot{min-height:64px;margin:8px;border:2px dashed #d6ccc4;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  color:#b5aaa2;font-size:13px;transition:background .15s,border-color .15s}
+.slot.over{border-color:var(--red);background:#fdeeea}
+.slot.filled{border-style:solid;border-color:transparent;padding:0}
+.slot.target{border-color:var(--red);animation:pulse 1s infinite}
+@keyframes pulse{50%{background:#fdeeea}}
+
+.bankwrap{position:sticky;top:70px;background:var(--paper);border-radius:18px;padding:16px;box-shadow:0 6px 18px rgba(58,51,48,.12)}
+.bankwrap h3{font-size:16px;margin-bottom:10px;display:flex;justify-content:space-between}
+.bank{display:flex;flex-wrap:wrap;gap:8px;min-height:60px;border-radius:12px;transition:background .15s}
+.bank.over{background:#fdeeea}
+.bank .empty{color:var(--muted);font-size:14px;padding:10px}
+.chip{color:var(--ink);background:#fff;border:2px solid var(--pink);border-radius:10px;padding:7px 10px;font-size:15px;font-weight:700;line-height:1.3;
+  white-space:pre-line;text-align:center;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:0 2px 6px rgba(58,51,48,.1)}
+.slot .chip{width:100%;border-color:var(--sage);background:#f6f9ef;font-size:14px}
+.chip.sel{border-color:var(--red);background:#fdeeea;transform:scale(1.04)}
+.chip.ghost{opacity:.35}
+.drag{position:fixed;z-index:100;pointer-events:none;transform:translate(-50%,-50%) rotate(-3deg) scale(1.06);box-shadow:0 10px 24px rgba(0,0,0,.25)}
+.submitbar{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.submitbar .btn{width:100%}
+
+.locked .chip{cursor:default}
+.done{grid-column:1/-1;background:#eef5e8;border:2px solid #b9d3a6;border-radius:16px;padding:16px 18px;font-size:18px;font-weight:700;color:#2f6b45;text-align:center}
+
+dialog{border:0;border-radius:20px;padding:26px 24px;max-width:360px;width:calc(100% - 32px);box-shadow:0 20px 50px rgba(0,0,0,.3);background:var(--paper);color:var(--ink)}
+dialog::backdrop{background:rgba(30,26,24,.55)}
+dialog p{font-size:18px;line-height:1.6;margin-bottom:18px;text-align:center}
+dialog .row{display:flex;gap:10px;justify-content:center}
+
+@media (max-width:760px){
+  main{grid-template-columns:1fr;padding-bottom:calc(var(--bankh,240px) + 20px)}
+  .tiles{grid-template-columns:repeat(3,1fr);gap:8px}
+  .slot{min-height:54px;margin:5px}
+  .slot .chip{font-size:12px;padding:5px 4px}
+  .bankwrap{position:fixed;left:0;right:0;bottom:0;top:auto;border-radius:18px 18px 0 0;max-height:42vh;overflow:auto;z-index:30;padding:12px 12px calc(12px + env(safe-area-inset-bottom))}
+  .chip{font-size:14px;padding:6px 8px}
+}
 </style>
 </head>
 <body>
-  <h1>活動</h1>
-  <p>內容準備中，敬請期待。</p>
-  <a href="index.html">← 回首頁</a>
+
+<section id="login">
+  <img class="banner" src="img/goals/banner.jpg" alt="OUR GOALS For Special Students">
+  <form class="card" id="loginForm" autocomplete="off">
+    <h1>目標配對挑戰</h1>
+    <label>房間代碼（講師畫面上的數字）
+      <input id="inRoom" inputmode="numeric" maxlength="8" required>
+    </label>
+    <label>你的學號
+      <input id="inSid" maxlength="20" required>
+    </label>
+    <button class="btn" type="submit">開始作答</button>
+    <div class="err" id="loginErr"></div>
+  </form>
+  <a class="home" href="index.html">← 回首頁</a>
+</section>
+
+<section id="play" class="hidden">
+  <header>
+    <span class="t">OUR GOALS 配對</span>
+    <span class="who" id="who"></span>
+    <span class="net" id="net">連線中…</span>
+    <span class="sp"></span>
+    <span class="count" id="count"></span>
+  </header>
+  <main id="main">
+    <p class="hint" id="hint">把下方的文字拖曳到符合的目標圖片（也可以先點文字、再點圖片）。全部配好後按「交出答案」。</p>
+    <div class="done hidden" id="doneMsg">✔ 已交出答案，答案已鎖定。請等待講師對答案！</div>
+    <div class="tiles" id="tiles"></div>
+    <aside class="bankwrap" id="bankwrap">
+      <h3><span>文字卡</span><span id="left"></span></h3>
+      <div class="bank" id="bank"></div>
+      <div class="submitbar" id="submitbar">
+        <button class="btn" id="btnSubmit" disabled>交出答案</button>
+        <div class="err" id="playErr"></div>
+      </div>
+    </aside>
+  </main>
+</section>
+
+<dialog id="dlg"><p id="dlgText"></p><div class="row" id="dlgRow"></div></dialog>
+
+<script src="lib/peerjs.min.js"></script>
+<script src="goals-data.js"></script>
+<script>
+const N = GOALS.length;
+const $ = id => document.getElementById(id);
+const KEY = 'goals-student-v1';
+
+let S = null;            // {room, sid, order:[labelIdx], place:[labelIdx|null], locked}
+let peer = null, conn = null, connected = false, pendingSubmit = false, retryTimer = null, roomMissing = false;
+let selected = null;     // label index selected by tap
+
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)); }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+/* ---------- login ---------- */
+const q = new URLSearchParams(location.search);
+const saved = load();
+$('inRoom').value = q.get('room') || (saved && saved.room) || '';
+if (saved && saved.sid) $('inSid').value = saved.sid;
+
+$('loginForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const room = $('inRoom').value.trim();
+  const sid = $('inSid').value.trim().replace(/\s+/g, '');
+  if (!/^\d{3,8}$/.test(room)) { $('loginErr').textContent = '請輸入講師畫面上的房間代碼（數字）'; return; }
+  if (!/^[A-Za-z0-9\-_]{1,20}$/.test(sid)) { $('loginErr').textContent = '學號只能包含英文字母和數字'; return; }
+  const old = load();
+  if (old && old.room === room && old.sid === sid) S = old;
+  else S = { room, sid, order: shuffle([...Array(N).keys()]), place: Array(N).fill(null), locked: false };
+  save();
+  $('login').classList.add('hidden'); $('play').classList.remove('hidden');
+  $('who').textContent = '學號 ' + sid;
+  render(); connect();
+});
+
+/* ---------- render ---------- */
+function chipEl(li){
+  const c = document.createElement('div');
+  c.className = 'chip'; c.textContent = GOALS[li].label; c.dataset.li = li;
+  if (selected === li) c.classList.add('sel');
+  return c;
+}
+function render(){
+  const tiles = $('tiles'); tiles.innerHTML = '';
+  GOALS.forEach((g, ti) => {
+    const t = document.createElement('div'); t.className = 'tile';
+    const img = document.createElement('img'); img.src = g.img; img.alt = '目標 ' + g.n; img.draggable = false;
+    const slot = document.createElement('div'); slot.className = 'slot'; slot.dataset.ti = ti;
+    const li = S.place[ti];
+    if (li !== null) { slot.classList.add('filled'); slot.appendChild(chipEl(li)); }
+    else { slot.textContent = S.locked ? '' : '放這裡'; if (selected !== null) slot.classList.add('target'); }
+    t.append(img, slot); tiles.appendChild(t);
+  });
+  const bank = $('bank'); bank.innerHTML = '';
+  const used = new Set(S.place.filter(v => v !== null));
+  const rest = S.order.filter(li => !used.has(li));
+  rest.forEach(li => bank.appendChild(chipEl(li)));
+  if (!rest.length) { const e = document.createElement('div'); e.className = 'empty'; e.textContent = S.locked ? '已交出' : '全部配對完成！可以交出答案了'; bank.appendChild(e); }
+  const placed = N - rest.length;
+  $('count').textContent = `已配對 ${placed} / ${N}`;
+  $('left').textContent = rest.length ? `剩 ${rest.length} 張` : '';
+  $('btnSubmit').disabled = S.locked || placed < N || pendingSubmit;
+  $('btnSubmit').textContent = pendingSubmit ? '傳送中…' : '交出答案';
+  $('main').classList.toggle('locked', S.locked);
+  $('doneMsg').classList.toggle('hidden', !S.locked);
+  $('hint').classList.toggle('hidden', S.locked);
+  $('submitbar').classList.toggle('hidden', S.locked);
+  $('bankwrap').classList.toggle('hidden', S.locked);
+  requestAnimationFrame(() => document.documentElement.style.setProperty('--bankh', $('bankwrap').offsetHeight + 'px'));
+}
+
+/* ---------- moving chips ---------- */
+function moveTo(li, target){ // target: tile index or 'bank'
+  if (S.locked) return;
+  const from = S.place.indexOf(li);
+  if (target === 'bank') { if (from >= 0) S.place[from] = null; }
+  else {
+    const prev = S.place[target];
+    if (from >= 0) S.place[from] = (prev !== null && prev !== li) ? prev : null; // swap between tiles
+    S.place[target] = li;
+  }
+  selected = null; save(); render(); sendProgress();
+}
+
+let drag = null; // {li, el, ghostSrc, x0, y0, moved}
+document.addEventListener('pointerdown', e => {
+  const c = e.target.closest('.chip'); if (!c || S.locked) return;
+  e.preventDefault();
+  drag = { li: +c.dataset.li, src: c, x0: e.clientX, y0: e.clientY, moved: false, el: null, over: null };
+});
+document.addEventListener('pointermove', e => {
+  if (!drag) return;
+  if (!drag.moved && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 6) return;
+  if (!drag.moved) {
+    drag.moved = true;
+    drag.el = drag.src.cloneNode(true); drag.el.classList.add('drag'); drag.el.classList.remove('sel');
+    drag.el.style.width = drag.src.offsetWidth + 'px';
+    document.body.appendChild(drag.el); drag.src.classList.add('ghost');
+  }
+  drag.el.style.left = e.clientX + 'px'; drag.el.style.top = e.clientY + 'px';
+  const under = document.elementFromPoint(e.clientX, e.clientY);
+  const tgt = under && (under.closest('.slot') || under.closest('.tile')?.querySelector('.slot') || under.closest('.bankwrap')?.querySelector('.bank'));
+  if (drag.over !== tgt) { drag.over?.classList.remove('over'); tgt?.classList.add('over'); drag.over = tgt; }
+});
+function endDrag(e, cancel){
+  if (!drag) return;
+  const d = drag; drag = null;
+  d.over?.classList.remove('over');
+  if (d.el) d.el.remove();
+  d.src.classList.remove('ghost');
+  if (cancel) return;
+  if (!d.moved) { // tap: select / deselect
+    const inSlot = d.src.closest('.slot');
+    if (selected !== null && inSlot && selected !== d.li) { moveTo(selected, +inSlot.dataset.ti); return; }
+    selected = (selected === d.li) ? null : d.li; render(); return;
+  }
+  if (!d.over) return;
+  if (d.over.classList.contains('bank')) moveTo(d.li, 'bank');
+  else moveTo(d.li, +d.over.dataset.ti);
+}
+document.addEventListener('pointerup', e => endDrag(e, false));
+document.addEventListener('pointercancel', e => endDrag(e, true));
+// tap on an empty slot / tile / bank while a chip is selected
+document.addEventListener('click', e => {
+  if (selected === null || S.locked || e.target.closest('.chip')) return;
+  const slot = e.target.closest('.slot') || e.target.closest('.tile')?.querySelector('.slot');
+  if (slot) { moveTo(selected, +slot.dataset.ti); return; }
+  if (e.target.closest('.bankwrap')) { moveTo(selected, 'bank'); return; }
+});
+
+/* ---------- dialog ---------- */
+function ask(text, buttons){
+  return new Promise(res => {
+    $('dlgText').textContent = text; const row = $('dlgRow'); row.innerHTML = '';
+    buttons.forEach(([label, val, cls]) => { const b = document.createElement('button'); b.className = 'btn ' + (cls || ''); b.textContent = label;
+      b.onclick = () => { $('dlg').close(); res(val); }; row.appendChild(b); });
+    $('dlg').showModal();
+  });
+}
+
+$('btnSubmit').addEventListener('click', async () => {
+  if (S.place.some(v => v === null)) return;
+  const ok = await ask('確定要交出答案嗎？\n交出後就不能再修改囉！', [['再檢查一下', false, 'ghost'], ['確定交出', true]]);
+  if (!ok) return;
+  if (!connected) { $('playErr').textContent = '還沒連上講師電腦，連線後會自動交出。'; }
+  pendingSubmit = true; render(); trySubmit();
+});
+function trySubmit(){
+  if (pendingSubmit && connected) conn.send({ t: 'submit', sid: S.sid, ans: S.place });
+}
+
+/* ---------- network ---------- */
+function setNet(state, text){ const n = $('net'); n.className = 'net ' + state; n.textContent = text; }
+function sendProgress(){ if (connected) conn.send({ t: 'progress', sid: S.sid, n: S.place.filter(v => v !== null).length }); }
+function scheduleRetry(){ clearTimeout(retryTimer); retryTimer = setTimeout(openConn, 3000); }
+
+function connect(){
+  setNet('', '連線中…');
+  peer = new Peer(peerOptions());
+  peer.on('open', openConn);
+  peer.on('disconnected', () => { setNet('off', '連線中斷，重新連線中…'); setTimeout(() => { try{ peer.reconnect(); }catch(e){} }, 2000); });
+  peer.on('error', err => {
+    connected = false;
+    if (err.type === 'peer-unavailable') { roomMissing = true; setNet('off', '找不到房間，請確認代碼／講師頁已開啟'); scheduleRetry(); }
+    else if (['network','server-error','socket-error','socket-closed'].includes(err.type)) { setNet('off', '網路連線失敗，重試中…'); }
+    else { setNet('off', '連線錯誤，重試中…'); scheduleRetry(); }
+  });
+}
+function openConn(){
+  if (!peer || peer.destroyed || peer.disconnected) return;
+  try { conn?.close(); } catch(e){}
+  const c = peer.connect(ROOM_PREFIX + S.room, { reliable: true, metadata: { sid: S.sid } });
+  conn = c;
+  c.on('open', () => {
+    if (conn !== c) return;
+    connected = true; roomMissing = false; setNet('on', '已連線');
+    c.send({ t: 'hello', sid: S.sid, n: S.place.filter(v => v !== null).length });
+    trySubmit();
+  });
+  c.on('data', d => {
+    if (!d || typeof d !== 'object') return;
+    if (d.t === 'welcome' && d.done && !S.locked) { S.locked = true; pendingSubmit = false; save(); render(); }
+    if (d.t === 'ack' || d.t === 'reject') {
+      pendingSubmit = false; S.locked = true; save(); $('playErr').textContent = '';
+      render();
+      if (d.t === 'reject') $('doneMsg').textContent = '✔ 這個學號已經交過答案了，答案已鎖定。';
+    }
+  });
+  c.on('close', () => { if (conn !== c) return; connected = false; setNet('off', '連線中斷，重新連線中…'); scheduleRetry(); });
+  c.on('error', () => { if (conn !== c) return; connected = false; scheduleRetry(); });
+  // if the connection never opens (e.g. blocked), retry
+  setTimeout(() => { if (conn === c && !connected && !roomMissing) { setNet('off', '連線較慢，重試中…'); scheduleRetry(); } }, 12000);
+}
+
+/* resume a previous session automatically */
+if (saved && saved.sid && (!q.get('room') || q.get('room') === saved.room)) {
+  $('inRoom').value = saved.room; $('inSid').value = saved.sid;
+  if (saved.locked || saved.place.some(v => v !== null)) $('loginForm').requestSubmit();
+}
+</script>
 </body>
 </html>

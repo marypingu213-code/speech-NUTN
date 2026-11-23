@@ -29,7 +29,7 @@ th.tc{font-size:13px;color:#fff;border-radius:6px}
 th.slot{width:62px;font-size:15px;color:var(--muted);line-height:1.2}
 th.slot b{display:block;font-size:22px;color:var(--ink)}
 td{vertical-align:top;height:96px;background:rgba(255,255,255,.55);outline:2px dashed transparent;outline-offset:-3px;cursor:pointer;padding:3px;border-bottom:1.5px solid var(--pl)}
-td.dayend,th.dayend{border-right:3px solid var(--dl)}
+td.dayend{border-right:3px solid var(--dl)}
 tr.top th.day,tr.top2 th{border-bottom:none}
 th.slot{border-bottom:1.5px solid var(--pl);border-right:3px solid var(--dl)}
 td.x{transition:background .15s}
@@ -73,7 +73,6 @@ aside{position:sticky;top:84px;display:flex;flex-direction:column;gap:12px}
   <h1>🎰 排課大挑戰</h1>
   <span class="sp"></span>
   <button class="btn main" id="bSpin">轉動！</button>
-  <button class="btn" id="bLine" title="切換格線顏色">格線：灰色</button>
   <button class="btn" id="bOrig">↺ 原始課表</button>
   <a class="btn" href="files/%E8%AA%B2%E8%A1%A8.pdf" target="_blank" rel="noopener">📄 課表 PDF</a>
   <button class="btn" onclick="history.length>1?history.back():location.href='gems.html?c=1'">← 返回</button>
@@ -112,8 +111,8 @@ function check(P){
   return r}
 function render(spin){
   const tb=$('tbl');let h='<colgroup><col style="width:66px">'+'<col>'.repeat(15)+'</colgroup>';
-  h+='<tr class="top"><th></th>'+DAYS.map((d,i)=>`<th class="day${i<4?' dayend':''}" colspan="3">星期${d}</th>`).join('')+'</tr>';
-  h+='<tr class="top2"><th></th>'+DAYS.map((_,d)=>TN.map((n,t)=>`<th class="tc${t===2&&d<4?' dayend':''}" style="background:${TC[t]}">${n}</th>`).join('')).join('')+'</tr>';
+  h+='<tr class="top"><th></th>'+DAYS.map((d,i)=>`<th class="day" colspan="3">星期${d}</th>`).join('')+'</tr>';
+  h+='<tr class="top2"><th></th>'+DAYS.map((_,d)=>TN.map((n,t)=>`<th class="tc" style="background:${TC[t]}">${n}</th>`).join('')).join('')+'</tr>';
   const R=check();const confIds=new Set(R.conf.flatMap(c=>[c[1],c[2]]).concat(R.dupDay.flat()));const badM=new Set(R.conf.map(c=>c[0]).concat(R.lowBad));
   const three=new Set(R.three);
   for(let s=0;s<5;s++){
@@ -175,9 +174,6 @@ function spin(){
     render(true);busy=false;$('bSpin').disabled=false}},70);
 }
 $('bSpin').onclick=spin;
-let black=false;try{black=localStorage.getItem('sg-line')==='black'}catch(e){}
-function applyLine(){const r=document.documentElement.style;r.setProperty('--dl',black?'#3a3330':'#9a8f86');r.setProperty('--pl',black?'#7d716a':'#cfc6bd');$('bLine').textContent='格線：'+(black?'黑色':'灰色')}
-$('bLine').onclick=()=>{black=!black;try{localStorage.setItem('sg-line',black?'black':'gray')}catch(e){};applyLine()};applyLine();
 $('bOrig').onclick=()=>{pos=ORIG.map(p=>p.slice());sel=null;$('count').innerHTML='原始<small>目前是原始課表</small>';$('msg').textContent='';render(true)};
 /* ---------- 手動交換 ---------- */
 $('tbl').addEventListener('click',e=>{

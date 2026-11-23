@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>南台灣特教小太陽</title>
 <link rel="preload" href="fonts/Iansui.woff2" as="font" type="font/woff2" crossorigin>
-<style>@font-face{font-family:"Iansui";src:url("fonts/Iansui.woff2") format("woff2");font-weight:100 900;font-display:block}</style>
+<style>@font-face{font-family:"Iansui";src:url("fonts/Iansui.woff2") format("woff2");font-weight:100 900;font-display:block}.ptxt{display:inline-block;vertical-align:middle;width:auto;max-width:100%;object-fit:contain}
+</style>
 <style>
 :root{--cream:#f8f2e4;--paper:#fffaf0;--pink:#ecc7bd;--sage:#d9e3c5;--ink:#3a3330;--red:#c0392b;--muted:#7d716a}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -39,11 +40,11 @@ h1 .sun{color:var(--red)}
 </head>
 <body>
   <button id="music" aria-pressed="false" title="背景音樂開／關"><span class="note">♪</span><span id="mLabel">播放音樂</span></button>
-  <h1>南台灣<br>特教<span class="sun">小太陽</span></h1>
+  <h1 aria-label="南台灣特教小太陽"><img class="ptxt" src="img/txt/2a750f46084f.png" alt="南台灣" style="height:1.0031em;aspect-ratio:2.8062/1.0031"><br><img class="ptxt" src="img/txt/f10b444080de.png" alt="特教" style="height:1.0031em;aspect-ratio:1.8375/1.0031"><img class="ptxt" src="img/txt/b98ae2271eb9.png" alt="小太陽" style="height:1.0031em;aspect-ratio:2.7188/1.0031"></h1>
   <nav class="choices">
-    <a class="choice a" href="activity.html"><img class="ic ring" src="img/sdg-ring.svg" alt=""><b>OUR GOALS<br>挑戰配對</b></a>
-    <a class="choice b" href="gems.html"><div class="ic">💎</div><b>寶石鑑定室</b></a>
-    <a class="choice c" href="possibilities.html"><div class="ic">🌱</div><b>資源班的<br>N種可能</b></a>
+    <a class="choice a" href="activity.html"><img class="ic ring" src="img/sdg-ring.svg" alt=""><b><img class="ptxt" src="img/txt/15c1c4c331ac.png" alt="OUR GOALS" style="height:1.005em;aspect-ratio:4.34/1.005"><br><img class="ptxt" src="img/txt/b912b060defa.png" alt="挑戰配對" style="height:1.005em;aspect-ratio:3.895/1.005"></b></a>
+    <a class="choice b" href="gems.html"><div class="ic">💎</div><b><img class="ptxt" src="img/txt/d6172124e96d.png" alt="寶石鑑定室" style="height:1.005em;aspect-ratio:4.74/1.005"></b></a>
+    <a class="choice c" href="possibilities.html"><div class="ic">🌱</div><b><img class="ptxt" src="img/txt/bdbfdaaf6246.png" alt="資源班的" style="height:1.005em;aspect-ratio:3.775/1.005"><br><img class="ptxt" src="img/txt/7694027a9d73.png" alt="N種可能" style="height:1.005em;aspect-ratio:3.35/1.005"></b></a>
   </nav>
 <script>
 /* 背景音樂：以 Web Audio 即時合成的輕快旋律（原創，無版權問題） */

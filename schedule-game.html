@@ -9,7 +9,7 @@
 .ptxt.pl{display:block;margin:0 auto}.ptxt.pl+.ptxt.pl{margin-top:.1em}
 </style>
 <style>
-:root{--cream:#f8f2e4;--paper:#fffaf0;--ink:#3a3330;--red:#c0392b;--muted:#7d716a;--line:rgba(58,51,48,.16);--ok:#3c8d5a;
+:root{--dl:#9a8f86;--pl:#cfc6bd;--cream:#f8f2e4;--paper:#fffaf0;--ink:#3a3330;--red:#c0392b;--muted:#7d716a;--line:rgba(58,51,48,.16);--ok:#3c8d5a;
   --tA:#d9a441;--tB:#5aa0c8;--tC:#9b7bc4;--guo:#f6d6cf;--shu:#cfe3f3;--she:#dcebcf;--wai:#e7dcf3}
 *{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;background:var(--cream);color:var(--ink);font-family:"Iansui",system-ui,sans-serif}
@@ -22,15 +22,19 @@ h1{font-size:clamp(24px,2.6vw,36px);color:var(--red);letter-spacing:.06em}
 .btn:disabled{opacity:.5;cursor:wait}
 .wrap{max-width:1600px;margin:0 auto;padding:14px 16px 40px;display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
 .tablewrap{overflow-x:auto;background:var(--paper);border-radius:18px;box-shadow:0 6px 18px rgba(58,51,48,.1);padding:10px}
-table{border-collapse:separate;border-spacing:3px;width:100%;min-width:1080px;table-layout:fixed}
+table{border-collapse:collapse;width:100%;min-width:1080px;table-layout:fixed}
 th{font-weight:400;font-size:17px;padding:4px}
 th.day{font-size:22px;background:#fff;border-radius:10px}
 th.tc{font-size:13px;color:#fff;border-radius:6px}
 th.slot{width:62px;font-size:15px;color:var(--muted);line-height:1.2}
 th.slot b{display:block;font-size:22px;color:var(--ink)}
-td{vertical-align:top;height:96px;border-radius:10px;background:rgba(255,255,255,.55);border:2px dashed transparent;cursor:pointer;padding:0;transition:background .15s}
+td{vertical-align:top;height:96px;background:rgba(255,255,255,.55);outline:2px dashed transparent;outline-offset:-3px;cursor:pointer;padding:3px;border-bottom:1.5px solid var(--pl)}
+td.dayend,th.dayend{border-right:3px solid var(--dl)}
+tr.top th.day,tr.top2 th{border-bottom:none}
+th.slot{border-bottom:1.5px solid var(--pl);border-right:3px solid var(--dl)}
+td.x{transition:background .15s}
 td.blocked{background:repeating-linear-gradient(45deg,#eee6d8,#eee6d8 6px,#f6f0e6 6px,#f6f0e6 12px);cursor:not-allowed;text-align:center;vertical-align:middle;color:var(--muted);font-size:15px}
-td.target{border-color:var(--red);background:#fff4f1}
+td.target{outline-color:var(--red);background:#fff4f1}
 td.lunch{height:auto;background:none;cursor:default;text-align:center;color:var(--muted);font-size:14px;padding:4px}
 .card{height:100%;border-radius:9px;padding:5px 5px 4px;display:flex;flex-direction:column;gap:3px;border:2px solid transparent;transition:transform .15s}
 .card.guo{background:var(--guo)}.card.shu{background:var(--shu)}.card.she{background:var(--she)}.card.wai{background:var(--wai)}
@@ -69,6 +73,7 @@ aside{position:sticky;top:84px;display:flex;flex-direction:column;gap:12px}
   <h1>🎰 排課大挑戰</h1>
   <span class="sp"></span>
   <button class="btn main" id="bSpin">轉動！</button>
+  <button class="btn" id="bLine" title="切換格線顏色">格線：灰色</button>
   <button class="btn" id="bOrig">↺ 原始課表</button>
   <a class="btn" href="files/%E8%AA%B2%E8%A1%A8.pdf" target="_blank" rel="noopener">📄 課表 PDF</a>
   <button class="btn" onclick="history.length>1?history.back():location.href='gems.html?c=1'">← 返回</button>
@@ -107,8 +112,8 @@ function check(P){
   return r}
 function render(spin){
   const tb=$('tbl');let h='<colgroup><col style="width:66px">'+'<col>'.repeat(15)+'</colgroup>';
-  h+='<tr><th></th>'+DAYS.map(d=>`<th class="day" colspan="3">星期${d}</th>`).join('')+'</tr>';
-  h+='<tr><th></th>'+DAYS.map(()=>TN.map((n,t)=>`<th class="tc" style="background:${TC[t]}">${n}</th>`).join('')).join('')+'</tr>';
+  h+='<tr class="top"><th></th>'+DAYS.map((d,i)=>`<th class="day${i<4?' dayend':''}" colspan="3">星期${d}</th>`).join('')+'</tr>';
+  h+='<tr class="top2"><th></th>'+DAYS.map((_,d)=>TN.map((n,t)=>`<th class="tc${t===2&&d<4?' dayend':''}" style="background:${TC[t]}">${n}</th>`).join('')).join('')+'</tr>';
   const R=check();const confIds=new Set(R.conf.flatMap(c=>[c[1],c[2]]).concat(R.dupDay.flat()));const badM=new Set(R.conf.map(c=>c[0]).concat(R.lowBad));
   const three=new Set(R.three);
   for(let s=0;s<5;s++){
@@ -117,7 +122,7 @@ function render(spin){
     for(let d=0;d<5;d++)for(let t=0;t<3;t++){
       const i=cellOf(d,s,t);const tgt=sel!==null&&SESS[sel].t===t&&(isMorning(sel)===(s===0))&&i!==sel;
       const sm=three.has(d+'-'+s)&&i>=0&&t===2;
-      h+=`<td data-d="${d}" data-s="${s}" data-t="${t}" class="${tgt?'target':''}">`;
+      h+=`<td data-d="${d}" data-s="${s}" data-t="${t}" class="${tgt?'target':''}${t===2&&d<4?' dayend':''}">`;
       if(i>=0){const o=SESS[i];
         h+=`<div class="card ${kind(o.g)} ${sel===i?'sel':''} ${confIds.has(i)?'conf':''} ${spin?'land':''} ${sm?'small':''}" style="animation-delay:${spin?(d*120+t*40+s*25):0}ms" data-i="${i}">
           <div class="gn">${o.g}${o.x?'<i>＊</i>':''}</div><div class="ms">${o.m.map(m=>`<span class="m ${badM.has(m)?'bad':''}" data-m="${m}">${m}</span>`).join('')}</div></div>`}
@@ -170,6 +175,9 @@ function spin(){
     render(true);busy=false;$('bSpin').disabled=false}},70);
 }
 $('bSpin').onclick=spin;
+let black=false;try{black=localStorage.getItem('sg-line')==='black'}catch(e){}
+function applyLine(){const r=document.documentElement.style;r.setProperty('--dl',black?'#3a3330':'#9a8f86');r.setProperty('--pl',black?'#7d716a':'#cfc6bd');$('bLine').textContent='格線：'+(black?'黑色':'灰色')}
+$('bLine').onclick=()=>{black=!black;try{localStorage.setItem('sg-line',black?'black':'gray')}catch(e){};applyLine()};applyLine();
 $('bOrig').onclick=()=>{pos=ORIG.map(p=>p.slice());sel=null;$('count').innerHTML='原始<small>目前是原始課表</small>';$('msg').textContent='';render(true)};
 /* ---------- 手動交換 ---------- */
 $('tbl').addEventListener('click',e=>{

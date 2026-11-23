@@ -13,7 +13,7 @@
   --s1:#d9a441;--s2:#5aa0c8;--s3:#7fae5a}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{background:var(--cream);color:var(--ink);font-family:"Iansui",system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+body{background:var(--cream);color:var(--ink);font-family:"Iansui",system-ui,sans-serif;display:flex;flex-direction:column;min-height:100%}
 body.scroll{overflow:auto;height:auto;min-height:100%}
 button{font:inherit;color:inherit}
 .ptxt{display:inline-block;vertical-align:middle;width:auto;max-width:100%;object-fit:contain}
@@ -25,28 +25,21 @@ h1{font-size:clamp(22px,2.6vw,34px);line-height:1}
 .cats a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink);background:#fff;border-radius:999px;padding:6px 14px;font-size:16px;border:3px solid transparent;box-shadow:0 2px 6px rgba(58,51,48,.1)}
 .cats a i{width:12px;height:12px;border-radius:50%;display:inline-block}
 .cats a.on{border-color:var(--red);font-weight:700}
-.cat{position:relative;border-radius:28px;overflow:hidden;background:#fff;text-decoration:none;display:flex;flex-direction:column;box-shadow:0 6px 20px rgba(58,51,48,.15);border:5px solid #fff;animation:in .5s cubic-bezier(.3,1.5,.5,1) both;animation-delay:calc(var(--i)*90ms);transition:transform .2s,border-color .2s}
-.cat:hover,.cat:focus-visible{transform:translateY(-6px);border-color:var(--sc);outline:none}
-.cat .mos{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px}
-.cat .mos div{background:#eee center/cover no-repeat}
-.cat .cl{flex:none;padding:2.5vh 10px;text-align:center;font-size:var(--fs,40px);border-top:10px solid var(--sc)}
-.cat .cn{display:block;font-size:.42em;color:var(--muted);margin-top:.3em}
 .sp{flex:1}
 .btn{border:0;border-radius:999px;padding:9px 20px;font-size:17px;font-weight:700;cursor:pointer;background:var(--red);color:#fff;box-shadow:0 4px 12px rgba(192,57,43,.25);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .btn.ghost{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(58,51,48,.12);font-size:14px;padding:7px 14px}
-#board{flex:1;min-height:0;display:grid;gap:var(--gap,10px);padding:var(--gap,10px)}
-body.scroll #board{flex:none}
-.tp{position:relative;background:#fff;border-radius:16px;display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;
-  box-shadow:0 3px 10px rgba(58,51,48,.12);border:3px solid #fff;cursor:pointer;text-decoration:none;
-  transition:transform .15s,border-color .15s,box-shadow .15s;animation:in .5s cubic-bezier(.3,1.5,.5,1) both;animation-delay:calc(var(--i)*25ms)}
-@keyframes in{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
-.tp:hover,.tp:focus-visible{transform:scale(1.04);border-color:var(--pink);box-shadow:0 10px 24px rgba(58,51,48,.2);outline:none;z-index:3}
-.tp .pic{flex:1;min-height:0;background:#eee center/cover no-repeat}
-.tp .lb{flex:none;height:calc(var(--fs,16px)*2.9);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:var(--fs,16px);padding:0 4px;border-top:5px solid var(--sc)}
-.tp .no{position:absolute;left:6px;top:6px;background:rgba(255,255,255,.92);color:var(--ink);font-size:calc(var(--fs,16px)*.75);border-radius:999px;padding:1px 9px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
-.tp .pg{position:absolute;right:6px;top:6px;background:rgba(58,51,48,.7);color:#fff;font-size:calc(var(--fs,16px)*.65);border-radius:999px;padding:1px 8px}
+#board{flex:1;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:clamp(14px,2vw,28px);padding:clamp(16px,3vh,40px) 16px;max-width:1500px;margin:0 auto;width:100%}
+.cat,.tp{position:relative;background:#fff;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(58,51,48,.12);border:3px solid #fff;border-bottom:8px solid var(--sc);transition:transform .15s,border-color .15s,box-shadow .15s;
+  animation:in .45s cubic-bezier(.3,1.5,.5,1) both;animation-delay:calc(var(--i)*40ms)}
+@keyframes in{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+.cat{width:clamp(220px,24vw,340px);height:clamp(130px,17vh,180px);border-radius:24px;font-size:clamp(30px,3vw,44px)}
+.tp{width:clamp(170px,17vw,250px);height:clamp(100px,13vh,130px);border-radius:18px;font-size:clamp(17px,1.6vw,23px);padding:10px}
+.cat:hover,.tp:hover,.cat:focus-visible,.tp:focus-visible{transform:translateY(-4px);border-color:var(--sc);box-shadow:0 10px 24px rgba(58,51,48,.18);outline:none}
+.tp .no{position:absolute;left:10px;top:7px;color:#b5aaa2;font-size:13px}
+.tp .pg{position:absolute;right:10px;top:7px;color:#b5aaa2;font-size:12px}
 .tp.seen .no::after{content:" ✓";color:#3c8d5a}
-.tp.hot,.cat.hot{border-color:var(--red);transform:scale(1.1);box-shadow:0 12px 30px rgba(192,57,43,.35);z-index:4}
+.tp.hot,.cat.hot{border-color:var(--red);transform:scale(1.08);box-shadow:0 12px 30px rgba(192,57,43,.35);z-index:4}
 #pick{position:fixed;inset:0;background:rgba(30,26,24,.82);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
 #pick.hidden{display:none}
 .pbox{background:var(--paper);border-radius:28px;padding:26px;width:min(560px,100%);text-align:center;display:flex;flex-direction:column;gap:16px;align-items:center;animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
@@ -70,7 +63,6 @@ body.scroll #board{flex:none}
 <main id="board"></main>
 <div id="pick" class="hidden"><div class="pbox">
   <div class="t" id="pT">抽到了！</div>
-  <img class="ph" id="pImg" alt="">
   <div class="nm" id="pNm"></div>
   <div class="row"><a class="btn" id="pGo">開始 ▶</a><button class="btn ghost" id="pAgain">再抽一次</button><button class="btn ghost" id="pClose">關閉</button></div>
 </div></div>
@@ -89,36 +81,16 @@ if(CAT)document.title='寶石鑑定室・'+CATS[CAT];
 function build(){
   const b=$('board');b.innerHTML='';const v=visited();
   if(!CAT){
-    [1,2,3].forEach((c,i)=>{const ts=TOPICS.filter(t=>t.sec===c),seen=ts.filter(t=>v.includes(t.n)).length;
-      const pics=ts.slice(0,4).map(t=>t.img);
-      const el=document.createElement('a');el.className='cat';el.href='gems.html?c='+c;el.style.setProperty('--i',i);el.style.setProperty('--sc',SC[c]);
-      el.innerHTML=`<div class="mos">${pics.map((p,k)=>`<div style="background-image:url('${p}')${pics.length===3&&k===2?';grid-column:1/3':''}"></div>`).join('')}</div><div class="cl">${ptxt(CATS[c],'#c0392b')}<span class="cn">${ts.length} 項${seen?`・已看 ${seen}`:''}</span></div>`;
-      b.appendChild(el)});
-    layout();return}
+    [1,2,3].forEach((c,i)=>{const el=document.createElement('a');el.className='cat';el.href='gems.html?c='+c;
+      el.style.setProperty('--i',i);el.style.setProperty('--sc',SC[c]);el.innerHTML=ptxt(CATS[c],'#c0392b');b.appendChild(el)});
+    return}
   LIST.forEach((t,i)=>{
     const el=document.createElement('a');el.className='tp'+(v.includes(t.n)?' seen':'');el.href='gemtalk.html?t='+t.n;el.dataset.n=t.n;
     el.style.setProperty('--i',i);el.style.setProperty('--sc',SC[t.sec]);el.title=t.label.replace(/\n/g,'');
-    el.innerHTML=`<div class="pic" style="background-image:url('${t.img}')"></div><div class="lb">${ptxt(t.label,'#6b4226')}</div><span class="no">${t.n}</span>${t.pages>1?`<span class="pg">${t.pages} 頁</span>`:''}`;
+    el.innerHTML=`${ptxt(t.label,'#6b4226')}<span class="no">${t.n}</span>${t.pages>1?`<span class="pg">${t.pages} 頁</span>`:''}`;
     b.appendChild(el)});
-  layout();
 }
-function layout(){
-  const b=$('board'),hd=document.querySelector('header');
-  const W=innerWidth,H=innerHeight-hd.offsetHeight;
-  if(!CAT){const mob=W<760;document.body.classList.toggle('scroll',mob);b.style.gridAutoRows=mob?'70vw':'';
-    b.style.gridTemplateColumns=mob?'1fr':'repeat(3,1fr)';b.style.gridTemplateRows=mob?'':'1fr';b.style.setProperty('--gap',mob?'14px':'3vw');
-    b.style.setProperty('--fs',(mob?40:Math.max(36,Math.min(80,W*.035)))+'px');return}
-  const N=LIST.length;let best=null;
-  for(let c=2;c<=11;c++){const r=Math.ceil(N/c),gap=Math.max(6,Math.min(14,W/c*.05));
-    const cw=(W-gap*(c+1))/c,ch=(H-gap*(r+1))/r;const s=Math.min(cw,ch/1.1);
-    if(!best||s>best.s)best={c,r,gap,s,cw,ch}}
-  if(best.s<130){const c=W<500?2:3,gap=10,cw=(W-gap*(c+1))/c;document.body.classList.add('scroll');
-    b.style.gridTemplateColumns=`repeat(${c},1fr)`;b.style.gridTemplateRows='';b.style.gridAutoRows=(cw*1.1)+'px';
-    b.style.setProperty('--gap',gap+'px');b.style.setProperty('--fs',Math.max(13,Math.min(18,cw*.1))+'px');return}
-  document.body.classList.remove('scroll');b.style.gridAutoRows='';
-  b.style.gridTemplateColumns=`repeat(${best.c},1fr)`;b.style.gridTemplateRows=`repeat(${best.r},1fr)`;
-  b.style.setProperty('--gap',best.gap+'px');b.style.setProperty('--fs',Math.max(13,Math.min(28,Math.min(best.cw*.095,best.ch*.085)))+'px');
-}
+function layout(){}
 addEventListener('resize',layout);
 let rolling=false;
 function roll(){
@@ -132,7 +104,7 @@ function roll(){
     el.classList.add('hot');if(document.body.classList.contains('scroll'))el.scrollIntoView({block:'nearest'});prev=el;i++;
     if(i<=total){delay*=1.1;setTimeout(tick,delay);return}
     setTimeout(()=>{el.classList.remove('hot');rolling=false;
-      $('pImg').src=win.img;$('pNm').innerHTML=ptxt(win.label,'#6b4226');$('pT').textContent=`抽到了！第 ${win.n} 個主題`;
+      $('pNm').innerHTML=ptxt(win.label,'#6b4226');$('pT').textContent=`抽到了！第 ${win.n} 個主題`;
       $('pGo').href='gemtalk.html?t='+win.n;$('pick').classList.remove('hidden')},600)})();
 }
 $('bRand').onclick=roll;$('pAgain').onclick=roll;

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>排課大挑戰</title>
+<link rel="preload" href="fonts/Iansui.woff2" as="font" type="font/woff2" crossorigin>
+<style>@font-face{font-family:"Iansui";src:url("fonts/Iansui.woff2") format("woff2");font-weight:100 900;font-display:block}.ptxt{display:inline-block;vertical-align:middle;width:auto;max-width:100%;object-fit:contain}
+.ptxt.pl{display:block;margin:0 auto}.ptxt.pl+.ptxt.pl{margin-top:.1em}
+</style>
+<style>
+:root{--cream:#f8f2e4;--paper:#fffaf0;--ink:#3a3330;--red:#c0392b;--muted:#7d716a;--line:rgba(58,51,48,.16);--ok:#3c8d5a;
+  --tA:#d9a441;--tB:#5aa0c8;--tC:#9b7bc4;--guo:#f6d6cf;--shu:#cfe3f3;--she:#dcebcf;--wai:#e7dcf3}
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:var(--cream);color:var(--ink);font-family:"Iansui",system-ui,sans-serif}
+button,a{font:inherit;color:inherit}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:rgba(248,242,228,.96);border-bottom:1px solid var(--line)}
+h1{font-size:clamp(24px,2.6vw,36px);color:var(--red);letter-spacing:.06em}
+.sp{flex:1}
+.btn{border:0;border-radius:999px;padding:10px 22px;font-size:18px;cursor:pointer;background:#fff;box-shadow:0 2px 8px rgba(58,51,48,.14);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn.main{background:var(--red);color:#fff;font-size:22px;padding:12px 30px;box-shadow:0 6px 16px rgba(192,57,43,.3)}
+.btn:disabled{opacity:.5;cursor:wait}
+.wrap{max-width:1600px;margin:0 auto;padding:14px 16px 40px;display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
+.tablewrap{overflow-x:auto;background:var(--paper);border-radius:18px;box-shadow:0 6px 18px rgba(58,51,48,.1);padding:10px}
+table{border-collapse:separate;border-spacing:3px;width:100%;min-width:1080px;table-layout:fixed}
+th{font-weight:400;font-size:17px;padding:4px}
+th.day{font-size:22px;background:#fff;border-radius:10px}
+th.tc{font-size:13px;color:#fff;border-radius:6px}
+th.slot{width:62px;font-size:15px;color:var(--muted);line-height:1.2}
+th.slot b{display:block;font-size:22px;color:var(--ink)}
+td{vertical-align:top;height:96px;border-radius:10px;background:rgba(255,255,255,.55);border:2px dashed transparent;cursor:pointer;padding:0;transition:background .15s}
+td.blocked{background:repeating-linear-gradient(45deg,#eee6d8,#eee6d8 6px,#f6f0e6 6px,#f6f0e6 12px);cursor:not-allowed;text-align:center;vertical-align:middle;color:var(--muted);font-size:15px}
+td.target{border-color:var(--red);background:#fff4f1}
+td.lunch{height:auto;background:none;cursor:default;text-align:center;color:var(--muted);font-size:14px;padding:4px}
+.card{height:100%;border-radius:9px;padding:5px 5px 4px;display:flex;flex-direction:column;gap:3px;border:2px solid transparent;transition:transform .15s}
+.card.guo{background:var(--guo)}.card.shu{background:var(--shu)}.card.she{background:var(--she)}.card.wai{background:var(--wai)}
+.card .gn{font-size:15px;line-height:1.1;white-space:nowrap;overflow:hidden;display:flex;justify-content:space-between;align-items:center}
+.card .gn i{font-style:normal;font-size:11px;color:var(--red)}
+.card .ms{display:flex;flex-wrap:wrap;gap:2px}
+.m{font-size:11.5px;background:rgba(255,255,255,.85);border-radius:5px;padding:0 4px;line-height:1.5}
+.m.hl{background:#ffe08a;outline:2px solid #e0a800}
+.m.bad{background:var(--red);color:#fff}
+.card.sel{border-color:var(--red);transform:scale(1.04);box-shadow:0 6px 14px rgba(192,57,43,.25)}
+.card.conf{border-color:var(--red);animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.card.spin{filter:blur(1.2px);opacity:.75}
+.card.land{animation:land .35s cubic-bezier(.3,1.6,.5,1)}
+@keyframes land{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+td.three{box-shadow:inset 0 0 0 2px rgba(155,123,196,.0)}
+.small{position:relative}
+.small::after{content:"小房間";position:absolute;right:3px;bottom:2px;font-size:10px;color:#7a5fa8;background:#fff;border-radius:4px;padding:0 3px}
+aside{position:sticky;top:84px;display:flex;flex-direction:column;gap:12px}
+.box{background:var(--paper);border-radius:16px;padding:14px 16px;box-shadow:0 4px 12px rgba(58,51,48,.08)}
+.box h3{font-size:18px;margin-bottom:8px}
+.rule{display:flex;gap:8px;align-items:flex-start;font-size:15px;line-height:1.45;padding:3px 0}
+.rule .st{flex:none;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;margin-top:1px}
+.rule.ok .st{background:var(--ok)}.rule.ng .st{background:var(--red)}.rule.info .st{background:#9b7bc4}
+.big{font-size:40px;text-align:center;color:var(--red);line-height:1.1}
+.big small{display:block;font-size:14px;color:var(--muted)}
+.note{font-size:14px;color:var(--muted);line-height:1.6}
+.legend{display:flex;flex-wrap:wrap;gap:6px;font-size:13px}
+.legend span{border-radius:6px;padding:1px 8px}
+#msg{min-height:1.4em;font-size:15px;color:var(--red);text-align:center}
+@media (max-width:1100px){.wrap{grid-template-columns:1fr}aside{position:static}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🎰 排課大挑戰</h1>
+  <span class="sp"></span>
+  <button class="btn main" id="bSpin">轉動！</button>
+  <button class="btn" id="bOrig">↺ 原始課表</button>
+  <a class="btn" href="files/%E8%AA%B2%E8%A1%A8.pdf" target="_blank" rel="noopener">📄 課表 PDF</a>
+  <button class="btn" onclick="history.length>1?history.back():location.href='gems.html?c=1'">← 返回</button>
+</header>
+<div class="wrap">
+  <div class="tablewrap"><table id="tbl"></table></div>
+  <aside>
+    <div class="box"><div class="big" id="count">原始<small>目前是原始課表</small></div><div id="msg"></div></div>
+    <div class="box"><h3>規則檢查</h3><div id="rules"></div></div>
+    <div class="box"><h3>怎麼玩</h3>
+      <p class="note">・按「轉動！」電腦會重新排出另一種可行的課表。<br>・也可以自己排：點一個組別，再點<b>同一位老師</b>的另一格，就會交換。<br>・把滑鼠移到學生代號上，會標出他整週的課。<br>・組別成員、授課老師不變；可以換日期、換節次。</p>
+      <div class="legend" style="margin-top:8px"><span style="background:var(--guo)">國語</span><span style="background:var(--shu)">數學</span><span style="background:var(--she)">社交</span><span style="background:var(--wai)">數學外加</span></div>
+    </div>
+    <div class="box"><h3>原課表的規則</h3><p class="note">＊表示超鐘點<br>□表示小房間上課，避免同時段三組上課<br>同一天課表可上下移動，注意學生不衝堂<br>低年級避免第四節上課（最多僅一次）<br>週三、週四下午：教師進修、策略聯盟</p>
+      <p class="note" style="margin-top:6px">學生以「年級＋代號」顯示（例如 2A），不顯示姓名。</p></div>
+  </aside>
+</div>
+<script>
+const SESS = [{"g": "社交B-1", "d": 0, "s": 0, "t": 0, "m": ["2A", "2B", "3A"], "x": false}, {"g": "社交C", "d": 0, "s": 0, "t": 1, "m": ["4A", "5A", "6A", "6B", "6C"], "x": true}, {"g": "社交B-2", "d": 0, "s": 0, "t": 2, "m": ["4B", "4C", "6D"], "x": false}, {"g": "社交A-1", "d": 1, "s": 0, "t": 0, "m": ["1A", "2C", "2D"], "x": false}, {"g": "數D外", "d": 1, "s": 0, "t": 1, "m": ["4B", "4D", "4C"], "x": false}, {"g": "社交A-2", "d": 1, "s": 0, "t": 2, "m": ["2E", "2F", "2G"], "x": false}, {"g": "社交B-1", "d": 2, "s": 0, "t": 0, "m": ["2A", "2B"], "x": true}, {"g": "社交B-2", "d": 2, "s": 0, "t": 2, "m": ["4B", "4C", "6D"], "x": false}, {"g": "社交A-1", "d": 3, "s": 0, "t": 0, "m": ["1A", "2C", "2D"], "x": false}, {"g": "數D外", "d": 3, "s": 0, "t": 1, "m": ["4B", "4D", "4C"], "x": false}, {"g": "社交A-2", "d": 3, "s": 0, "t": 2, "m": ["2E", "2F", "2G"], "x": false}, {"g": "社交C", "d": 4, "s": 0, "t": 1, "m": ["3A", "4A", "5A", "6A", "6B", "6C"], "x": true}, {"g": "數C", "d": 0, "s": 1, "t": 0, "m": ["4E", "4F", "4C", "6B"], "x": false}, {"g": "國C", "d": 0, "s": 1, "t": 2, "m": ["3B", "3C", "3D"], "x": false}, {"g": "數A", "d": 1, "s": 1, "t": 1, "m": ["2E", "2A", "2B", "2F"], "x": false}, {"g": "國A", "d": 1, "s": 1, "t": 2, "m": ["1B", "1A"], "x": false}, {"g": "數E", "d": 2, "s": 1, "t": 0, "m": ["6D", "6E"], "x": false}, {"g": "國B", "d": 2, "s": 1, "t": 1, "m": ["2E", "2A", "2F", "2G"], "x": false}, {"g": "國A", "d": 2, "s": 1, "t": 2, "m": ["1B", "1A"], "x": false}, {"g": "數A", "d": 3, "s": 1, "t": 1, "m": ["2E", "2A", "2B", "2F"], "x": false}, {"g": "國C", "d": 3, "s": 1, "t": 2, "m": ["3B", "3C", "3D"], "x": false}, {"g": "國D", "d": 4, "s": 1, "t": 1, "m": ["4F", "4B", "4C", "4D"], "x": false}, {"g": "數E", "d": 0, "s": 2, "t": 0, "m": ["6D", "6E"], "x": false}, {"g": "國D", "d": 0, "s": 2, "t": 1, "m": ["4F", "4B", "4C", "4D"], "x": false}, {"g": "數B", "d": 0, "s": 2, "t": 2, "m": ["3B", "3C", "3D"], "x": false}, {"g": "數C", "d": 1, "s": 2, "t": 0, "m": ["4E", "4F", "4C", "6B"], "x": false}, {"g": "國B", "d": 1, "s": 2, "t": 1, "m": ["2E", "2A", "2F", "2G"], "x": false}, {"g": "國E", "d": 2, "s": 2, "t": 0, "m": ["6D", "6B", "6C", "6E"], "x": false}, {"g": "國C", "d": 2, "s": 2, "t": 2, "m": ["3B", "3C", "3D"], "x": false}, {"g": "國E", "d": 3, "s": 2, "t": 0, "m": ["6D", "6B", "6C", "6E"], "x": false}, {"g": "國D", "d": 3, "s": 2, "t": 1, "m": ["4F", "4B", "4C", "4D"], "x": false}, {"g": "數E", "d": 4, "s": 2, "t": 0, "m": ["6D", "6E"], "x": false}, {"g": "數A", "d": 4, "s": 2, "t": 1, "m": ["2E", "2A", "2B", "2F"], "x": false}, {"g": "國A", "d": 4, "s": 2, "t": 2, "m": ["1B", "1A"], "x": false}, {"g": "國E", "d": 0, "s": 3, "t": 0, "m": ["6D", "6B", "6C", "6E"], "x": false}, {"g": "國B", "d": 0, "s": 3, "t": 1, "m": ["2E", "2A", "2F", "2G"], "x": false}, {"g": "國E", "d": 1, "s": 3, "t": 0, "m": ["6D", "6B", "6C", "6E"], "x": false}, {"g": "數B", "d": 1, "s": 3, "t": 2, "m": ["3B", "3C", "3D"], "x": false}, {"g": "國D", "d": 2, "s": 3, "t": 1, "m": ["4F", "4B", "4C", "4D"], "x": false}, {"g": "數B", "d": 2, "s": 3, "t": 2, "m": ["3B", "3C", "3D"], "x": false}, {"g": "國B", "d": 3, "s": 3, "t": 1, "m": ["2E", "2A", "2F", "2G"], "x": false}, {"g": "國A", "d": 3, "s": 3, "t": 2, "m": ["1B", "1A"], "x": false}, {"g": "數C", "d": 4, "s": 3, "t": 0, "m": ["4E", "4F", "4C", "6B"], "x": false}, {"g": "國B", "d": 4, "s": 3, "t": 1, "m": ["2E", "2A", "2F", "2G"], "x": false}, {"g": "國C", "d": 4, "s": 3, "t": 2, "m": ["3B", "3C", "3D"], "x": false}, {"g": "數A", "d": 0, "s": 4, "t": 1, "m": ["2E", "2A", "2B", "2F"], "x": false}, {"g": "國A", "d": 0, "s": 4, "t": 2, "m": ["1B", "1A"], "x": false}, {"g": "數E", "d": 1, "s": 4, "t": 0, "m": ["6D", "6E"], "x": false}, {"g": "國D", "d": 1, "s": 4, "t": 1, "m": ["4F", "4B", "4C", "4D"], "x": false}, {"g": "國C", "d": 1, "s": 4, "t": 2, "m": ["3B", "3C", "3D"], "x": false}, {"g": "數C", "d": 3, "s": 4, "t": 0, "m": ["4E", "4F", "4C", "6B"], "x": false}, {"g": "數B", "d": 3, "s": 4, "t": 2, "m": ["3B", "3C", "3D"], "x": false}, {"g": "國E", "d": 4, "s": 4, "t": 0, "m": ["6D", "6B", "6C", "6E"], "x": false}];
+const DAYS=['一','二','三','四','五'],SLOT=['早自習','第1節','第2節','第3節','第4節'],TIME=['07:50','08:40','09:30','10:30','11:20'];
+const TN=['A老師','B老師','代理老師'],TC=['var(--tA)','var(--tB)','var(--tC)'];
+const ORIG=SESS.map(o=>[o.d,o.s]);
+let pos=ORIG.map(p=>p.slice()),tries=0,sel=null,busy=false;
+const isMorning=i=>SESS[i].s===0;  // 早自習的組別只在早自習
+const kind=g=>g.includes('外')?'wai':g.startsWith('社交')?'she':g.startsWith('國')?'guo':'shu';
+const $=id=>document.getElementById(id);
+function cellOf(d,s,t){return pos.findIndex((p,i)=>p[0]===d&&p[1]===s&&SESS[i].t===t)}
+function check(P){
+  P=P||pos;const r={conf:[],dupDay:[],low4:{},three:[]};
+  const slot={};P.forEach((p,i)=>{const k=p[0]+'-'+p[1];(slot[k]=slot[k]||[]).push(i)});
+  for(const k in slot){const ids=slot[k];if(ids.length>=3)r.three.push(k);
+    const seen={};ids.forEach(i=>SESS[i].m.forEach(m=>{if(seen[m]!==undefined)r.conf.push([m,seen[m],i]);else seen[m]=i}))}
+  const gd={};P.forEach((p,i)=>{const k=SESS[i].g+'-'+p[0];if(gd[k]!==undefined)r.dupDay.push([gd[k],i]);else gd[k]=i});
+  P.forEach((p,i)=>{if(p[1]===4)SESS[i].m.forEach(m=>{if(m[0]<='2')r.low4[m]=(r.low4[m]||0)+1})});
+  r.lowBad=Object.keys(r.low4).filter(m=>r.low4[m]>1);
+  return r}
+function render(spin){
+  const tb=$('tbl');let h='<colgroup><col style="width:66px">'+'<col>'.repeat(15)+'</colgroup>';
+  h+='<tr><th></th>'+DAYS.map(d=>`<th class="day" colspan="3">星期${d}</th>`).join('')+'</tr>';
+  h+='<tr><th></th>'+DAYS.map(()=>TN.map((n,t)=>`<th class="tc" style="background:${TC[t]}">${n}</th>`).join('')).join('')+'</tr>';
+  const R=check();const confIds=new Set(R.conf.flatMap(c=>[c[1],c[2]]).concat(R.dupDay.flat()));const badM=new Set(R.conf.map(c=>c[0]).concat(R.lowBad));
+  const three=new Set(R.three);
+  for(let s=0;s<5;s++){
+    if(s===1)h+='';
+    h+=`<tr><th class="slot"><b>${s?s:'早'}</b>${TIME[s]}</th>`;
+    for(let d=0;d<5;d++)for(let t=0;t<3;t++){
+      const i=cellOf(d,s,t);const tgt=sel!==null&&SESS[sel].t===t&&(isMorning(sel)===(s===0))&&i!==sel;
+      const sm=three.has(d+'-'+s)&&i>=0&&t===2;
+      h+=`<td data-d="${d}" data-s="${s}" data-t="${t}" class="${tgt?'target':''}">`;
+      if(i>=0){const o=SESS[i];
+        h+=`<div class="card ${kind(o.g)} ${sel===i?'sel':''} ${confIds.has(i)?'conf':''} ${spin?'land':''} ${sm?'small':''}" style="animation-delay:${spin?(d*120+t*40+s*25):0}ms" data-i="${i}">
+          <div class="gn">${o.g}${o.x?'<i>＊</i>':''}</div><div class="ms">${o.m.map(m=>`<span class="m ${badM.has(m)?'bad':''}" data-m="${m}">${m}</span>`).join('')}</div></div>`}
+      h+='</td>'}
+    h+='</tr>';
+    if(s===4)h+=`<tr><td class="lunch" colspan="16">午餐及午休　｜　下午：週三教師進修、週四策略聯盟</td></tr>`;
+  }
+  tb.innerHTML=h;renderRules(R);
+}
+function renderRules(R){
+  const items=[
+    [R.conf.length===0,'學生不衝堂',R.conf.length?`有 ${R.conf.length} 處衝堂：${[...new Set(R.conf.map(c=>c[0]))].join('、')}`:''],
+    [R.lowBad.length===0,'低年級第四節最多一次',R.lowBad.length?`超過：${R.lowBad.join('、')}`:''],
+    [R.dupDay.length===0,'同一組一天最多上一次',R.dupDay.length?`有 ${R.dupDay.length} 組重複`:''],
+  ];
+  let h=items.map(([ok,t,x])=>`<div class="rule ${ok?'ok':'ng'}"><span class="st">${ok?'✓':'✕'}</span><span>${t}${x?`<br><small style="color:var(--red)">${x}</small>`:''}</span></div>`).join('');
+  h+=`<div class="rule info"><span class="st">i</span><span>三組同時上課（需用小房間）：${R.three.length} 個時段<br><small style="color:var(--muted)">越少越好</small></span></div>`;
+  $('rules').innerHTML=h;
+}
+/* ---------- 轉動：隨機產生符合規則的課表 ---------- */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function generate(){
+  for(let attempt=0;attempt<400;attempt++){
+    const P=new Array(SESS.length);const used=new Set(),busyM={},gday=new Set(),low4={},cnt={};
+    const order=shuffle(SESS.map((_,i)=>i)).sort((a,b)=>SESS[b].m.length-SESS[a].m.length+ (Math.random()-.5)*2);
+    let ok=true;
+    for(const i of order){const o=SESS[i];
+      const opts=[];for(let d=0;d<5;d++)for(const s of (o.s===0?[0]:[1,2,3,4]))opts.push([d,s]);
+      shuffle(opts);
+      // 盡量避免三組同時段：先試人數少的時段
+      opts.sort((a,b)=>(cnt[a[0]+'-'+a[1]]||0)-(cnt[b[0]+'-'+b[1]]||0)+(Math.random()-.5)*0.9);
+      let placed=false;
+      for(const [d,s] of opts){const k=d+'-'+s;
+        if(used.has(k+'-'+o.t))continue;
+        if(gday.has(o.g+'-'+d))continue;
+        if(o.m.some(m=>busyM[m+'@'+k]))continue;
+        if(s===4&&o.m.some(m=>m[0]<='2'&&(low4[m]||0)>=1))continue;
+        P[i]=[d,s];used.add(k+'-'+o.t);gday.add(o.g+'-'+d);o.m.forEach(m=>busyM[m+'@'+k]=1);
+        if(s===4)o.m.forEach(m=>{if(m[0]<='2')low4[m]=(low4[m]||0)+1});cnt[k]=(cnt[k]||0)+1;placed=true;break}
+      if(!placed){ok=false;break}}
+    if(ok)return P}
+  return null}
+function spin(){
+  if(busy)return;busy=true;sel=null;$('bSpin').disabled=true;$('msg').textContent='';
+  const P=generate();
+  const cards=[...document.querySelectorAll('.card')];let n=0;
+  const names=SESS.map(o=>o.g);
+  const tick=setInterval(()=>{cards.forEach(c=>{c.classList.add('spin');c.querySelector('.gn').firstChild.textContent=names[Math.floor(Math.random()*names.length)]});if(++n>14){clearInterval(tick);
+    if(P){pos=P;tries++;$('count').innerHTML=`第 ${tries} 種<small>電腦排出的新課表</small>`}else{$('msg').textContent='這次沒排出來，再轉一次！'}
+    render(true);busy=false;$('bSpin').disabled=false}},70);
+}
+$('bSpin').onclick=spin;
+$('bOrig').onclick=()=>{pos=ORIG.map(p=>p.slice());sel=null;$('count').innerHTML='原始<small>目前是原始課表</small>';$('msg').textContent='';render(true)};
+/* ---------- 手動交換 ---------- */
+$('tbl').addEventListener('click',e=>{
+  if(busy)return;const td=e.target.closest('td[data-d]');if(!td)return;
+  const d=+td.dataset.d,s=+td.dataset.s,t=+td.dataset.t;const i=cellOf(d,s,t);
+  if(sel===null){if(i>=0){sel=i;render()}return}
+  if(i===sel){sel=null;render();return}
+  if(SESS[sel].t!==t){$('msg').textContent='只能和同一位老師的格子交換喔！';sel=i>=0?i:null;render();return}
+  if(isMorning(sel)!==(s===0)){$('msg').textContent='早自習的組別只能排在早自習。';return}
+  const a=pos[sel].slice();pos[sel]=[d,s];if(i>=0)pos[i]=a;sel=null;$('msg').textContent='';
+  $('count').innerHTML='自己排<small>你調整過的課表</small>';render();
+});
+/* ---------- 標出同一位學生 ---------- */
+$('tbl').addEventListener('mouseover',e=>{const m=e.target.closest('.m');document.querySelectorAll('.m.hl').forEach(x=>x.classList.remove('hl'));
+  if(m)document.querySelectorAll(`.m[data-m="${m.dataset.m}"]`).forEach(x=>x.classList.add('hl'))});
+render();
+</script>
+</body>
+</html>

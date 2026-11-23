@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>資源班的N種可能</title>
 <link rel="preload" href="fonts/Iansui.woff2" as="font" type="font/woff2" crossorigin>
-<style>@font-face{font-family:"Iansui";src:url("fonts/Iansui.woff2") format("woff2");font-weight:100 900;font-display:block}</style>
+<style>@font-face{font-family:"Iansui";src:url("fonts/Iansui.woff2") format("woff2");font-weight:100 900;font-display:block}.ptxt{display:inline-block;vertical-align:middle;width:auto;max-width:100%;object-fit:contain}
+</style>
 <style>
 :root{--cream:#f8f2e4;--paper:#fffaf0;--pink:#ecc7bd;--ink:#3a3330;--red:#c0392b;--muted:#7d716a;--label:#6b4226;--line:rgba(58,51,48,.14)}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -28,7 +29,7 @@ body.scroll #board{flex:none}
 .act:hover,.act:focus-visible{transform:scale(1.05);border-color:var(--pink);box-shadow:0 8px 20px rgba(58,51,48,.18);outline:none;z-index:3}
 .act .pic{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}
 .act img{max-width:100%;max-height:100%;object-fit:contain;display:block}
-.act .lb{flex:none;margin-top:4%;font-family:"Iansui",system-ui,sans-serif;font-weight:700;font-size:var(--fs,15px);line-height:1.2;text-align:center;white-space:pre-line;height:2.4em;display:flex;align-items:center}
+.act .lb{flex:none;margin-top:4%;font-family:"Iansui",system-ui,sans-serif;font-weight:700;font-size:var(--fs,15px);line-height:1.2;text-align:center;white-space:pre-line;height:2.4em;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .act .no{position:absolute;left:5px;top:4px;color:#b5aaa2;font-size:calc(var(--fs,15px)*.62);font-weight:700}
 .act.seen::after{content:"✓";position:absolute;right:5px;top:5px;width:1.5em;height:1.5em;border-radius:50%;background:#3c8d5a;color:#fff;font-size:calc(var(--fs,15px)*.7);display:flex;align-items:center;justify-content:center}
 .act.hot{border-color:var(--red);transform:scale(1.15);box-shadow:0 12px 30px rgba(192,57,43,.35);z-index:4}
@@ -44,7 +45,7 @@ body.scroll #board{flex:none}
 </head>
 <body>
 <header>
-  <h1>資源班的N種可能</h1><span class="count" id="count"></span>
+  <h1 aria-label="資源班的N種可能"><img class="ptxt" src="img/txt/214718b258f1.png" alt="資源班的N種可能" style="height:1.005em;aspect-ratio:7.24/1.005"></h1><span class="count" id="count"></span>
   <span class="sp"></span>
   <button class="btn" id="bRand">🎲 隨機抽一個</button>
   <a class="btn ghost" href="talk.html?a=end">結尾</a>
@@ -58,6 +59,7 @@ body.scroll #board{flex:none}
   <div class="nm" id="pNm"></div>
   <div class="row"><a class="btn" id="pGo">開始 ▶</a><button class="btn ghost" id="pAgain">再抽一次</button><button class="btn ghost" id="pClose">關閉</button></div>
 </div></div>
+<script src="img/txt/ptxt.js"></script>
 <script>
 const ACTS = [{"n": 1, "label": "麋鹿打卡", "img": "img/acts/01.png"}, {"n": 2, "label": "國語文競賽", "img": "img/acts/02.png"}, {"n": 3, "label": "動畫阿虎\n危險地圖", "img": "img/acts/03.png"}, {"n": 4, "label": "教師節\n送導師紅筆", "img": "img/acts/04.png"}, {"n": 5, "label": "獎勵品\n衛生紙", "img": "img/acts/05.png"}, {"n": 6, "label": "復興國小", "img": "img/acts/06.png"}, {"n": 7, "label": "暑假報導", "img": "img/acts/07.png"}, {"n": 8, "label": "永福國小", "img": "img/acts/08.png"}, {"n": 9, "label": "教室佈置\n點字鏡面字", "img": "img/acts/09.png"}, {"n": 10, "label": "空拍機", "img": "img/acts/10.png"}, {"n": 11, "label": "裕文圖書館\n為愛朗讀", "img": "img/acts/11.png"}, {"n": 12, "label": "七股國小", "img": "img/acts/12.png"}, {"n": 13, "label": "雲林光復", "img": "img/acts/13.png"}, {"n": 14, "label": "獎勵品\n拍立得", "img": "img/acts/14.png"}, {"n": 15, "label": "ATM教學", "img": "img/acts/15.png"}, {"n": 16, "label": "新聞轉播", "img": "img/acts/16.png"}, {"n": 17, "label": "跳蚤市場\n義賣", "img": "img/acts/17.png"}, {"n": 18, "label": "巧克力DIY", "img": "img/acts/18.png"}, {"n": 19, "label": "黏土創作", "img": "img/acts/19.png"}, {"n": 20, "label": "京城銀行\n晉發碾米廠", "img": "img/acts/20.png"}, {"n": 21, "label": "安平古堡", "img": "img/acts/21.png"}, {"n": 22, "label": "教育部\n特殊優良教師", "img": "img/acts/22.png"}, {"n": 23, "label": "教室佈置\n花燈創作", "img": "img/acts/23.png"}, {"n": 24, "label": "教室布置\n最美的風景", "img": "img/acts/24.png"}, {"n": 25, "label": "親子天下\n教育創新", "img": "img/acts/25.png"}, {"n": 26, "label": "海安普濟殿", "img": "img/acts/26.png"}, {"n": 27, "label": "安平軍艦", "img": "img/acts/27.png"}, {"n": 28, "label": "雙層巴士", "img": "img/acts/28.png"}, {"n": 29, "label": "櫥窗故事", "img": "img/acts/29.png"}, {"n": 30, "label": "教室佈置\n水管寶可夢", "img": "img/acts/30.png"}, {"n": 31, "label": "實境解謎\n密室逃脫", "img": "img/acts/31.png"}, {"n": 32, "label": "鬆餅教學", "img": "img/acts/32.png"}, {"n": 33, "label": "Micro bit\nScratch", "img": "img/acts/33.png"}, {"n": 34, "label": "活動存摺", "img": "img/acts/34.png"}, {"n": 35, "label": "高雄IKEA", "img": "img/acts/35.png"}, {"n": 36, "label": "教室布置\n暑假卷軸畫", "img": "img/acts/36.png"}, {"n": 37, "label": "大同國小\n長榮桂冠", "img": "img/acts/37.png"}, {"n": 38, "label": "新化\n果菜市場", "img": "img/acts/38.png"}, {"n": 39, "label": "新化圖書館", "img": "img/acts/39.png"}, {"n": 40, "label": "水道博物館", "img": "img/acts/40.png"}, {"n": 41, "label": "永福\n蝴蝶彩繪", "img": "img/acts/41.png"}, {"n": 42, "label": "鹽水", "img": "img/acts/42.png"}, {"n": 43, "label": "南紡買衣服", "img": "img/acts/43.png"}, {"n": 44, "label": "九乘九文具", "img": "img/acts/44.png"}, {"n": 45, "label": "i(愛)郵箱", "img": "img/acts/45.png"}, {"n": 46, "label": "教室佈置\n鋁條", "img": "img/acts/46.png"}, {"n": 47, "label": "視訊連線\nCOVID-19防疫", "img": "img/acts/47.png"}, {"n": 48, "label": "教室布置\n飄飄燈管條", "img": "img/acts/48.png"}, {"n": 49, "label": "太陰星君", "img": "img/acts/49.png"}, {"n": 50, "label": "成語牆", "img": "img/acts/50.png"}, {"n": 51, "label": "南紡資訊月", "img": "img/acts/51.png"}, {"n": 52, "label": "成大野餐", "img": "img/acts/52.png"}, {"n": 53, "label": "馬雅各/摺紙", "img": "img/acts/53.png"}, {"n": 54, "label": "母親節插花", "img": "img/acts/54.png"}, {"n": 55, "label": "線上學習", "img": "img/acts/55.png"}, {"n": 56, "label": "總圖/烘焙DIY\n特色7-11", "img": "img/acts/56.png"}, {"n": 57, "label": "數位大電視", "img": "img/acts/57.png"}, {"n": 58, "label": "旗津駁二", "img": "img/acts/58.png"}, {"n": 59, "label": "林業鐵道", "img": "img/acts/59.png"}, {"n": 60, "label": "文化共融", "img": "img/acts/60.png"}, {"n": 61, "label": "九曲堂\n鳳梨.鐵橋", "img": "img/acts/61.png"}, {"n": 62, "label": "隆田CHACHA\n教育園區", "img": "img/acts/62.png"}, {"n": 63, "label": "十鼓文化園區", "img": "img/acts/63.png"}, {"n": 64, "label": "第二兒發\n蒞校參觀", "img": "img/acts/64.png"}, {"n": 65, "label": "故宮南院", "img": "img/acts/65.png"}, {"n": 66, "label": "娉茵鋒昀\n大三見習", "img": "img/acts/66.png"}, {"n": 67, "label": "學習提袋", "img": "img/acts/67.png"}, {"n": 68, "label": "Anping共融\n洋行新展", "img": "img/acts/68.png"}, {"n": 69, "label": "書營之間\n兩全皆美", "img": "img/acts/69.png"}, {"n": 70, "label": "增Resource\n設 one clsss", "img": "img/acts/70.png"}, {"n": 71, "label": "綁烤拼曬\n生命壯遊", "img": "img/acts/71.png"}, {"n": 72, "label": "市區街屋\n梅漢虎拜", "img": "img/acts/72.png"}, {"n": 73, "label": "官田西拉雅\n南藝清水模", "img": "img/acts/73.png"}];
 const $=id=>document.getElementById(id);
@@ -69,7 +71,7 @@ function build(){
     const el=document.createElement('a');el.className='act'+(v.includes(a.n)?' seen':'');el.href='talk.html?a='+a.n;el.dataset.n=a.n;el.style.setProperty('--i',i);
     el.title=one(a.label);
     const pic=document.createElement('div');pic.className='pic';const im=document.createElement('img');im.src=a.img;im.alt='';pic.appendChild(im);
-    const lb=document.createElement('div');lb.className='lb';lb.textContent=a.label;
+    const lb=document.createElement('div');lb.className='lb';lb.innerHTML=ptxt(a.label,'#6b4226');
     const no=document.createElement('span');no.className='no';no.textContent=a.n;
     el.append(no,pic,lb);b.appendChild(el)});
   $('count').textContent=`${ACTS.length} 個活動・已看 ${v.filter(n=>n>=1&&n<=ACTS.length).length}`;
@@ -107,7 +109,7 @@ function roll(){
     el.classList.add('hot');if(document.body.classList.contains('scroll'))el.scrollIntoView({block:'nearest'});prev=el;i++;
     if(i<=total){delay*=1.1;setTimeout(tick,delay);return}
     setTimeout(()=>{el.classList.remove('hot');rolling=false;
-      $('pImg').src=win.img;$('pNm').textContent=win.label;$('pT').textContent=`抽到了！第 ${win.n} 個活動`;
+      $('pImg').src=win.img;$('pNm').innerHTML=ptxt(win.label,'#6b4226');$('pT').textContent=`抽到了！第 ${win.n} 個活動`;
       $('pGo').href='talk.html?a='+win.n;$('pick').classList.remove('hidden')},600)})();
 }
 $('bRand').onclick=roll;$('pAgain').onclick=roll;

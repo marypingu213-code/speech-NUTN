@@ -36,6 +36,9 @@ h1{font-size:clamp(22px,2.6vw,34px);line-height:1}
 .cat{width:clamp(220px,24vw,340px);height:clamp(130px,17vh,180px);border-radius:24px;font-size:clamp(30px,3vw,44px)}
 .tp{width:clamp(170px,17vw,250px);height:clamp(100px,13vh,130px);border-radius:18px;font-size:clamp(17px,1.6vw,23px);padding:10px}
 .cat:hover,.tp:hover,.cat:focus-visible,.tp:focus-visible{transform:translateY(-4px);border-color:var(--sc);box-shadow:0 10px 24px rgba(58,51,48,.18);outline:none}
+.grp{display:flex;gap:clamp(10px,1.2vw,18px);padding:clamp(14px,1.6vw,22px);padding-top:30px;border-radius:24px;background:rgba(127,174,90,.13);border:2px dashed rgba(127,174,90,.6);position:relative;flex-wrap:wrap;justify-content:center}
+.grp.plain{display:contents}
+.grp .gno{position:absolute;left:14px;top:6px;font-size:16px;color:#5d8a3e;font-weight:700}
 .tp .no{position:absolute;left:10px;top:7px;color:#b5aaa2;font-size:13px}
 .tp .pg{position:absolute;right:10px;top:7px;color:#b5aaa2;font-size:12px}
 .tp.seen .no::after{content:" ✓";color:#3c8d5a}
@@ -84,11 +87,14 @@ function build(){
     [1,2,3].forEach((c,i)=>{const el=document.createElement('a');el.className='cat';el.href='gems.html?c='+c;
       el.style.setProperty('--i',i);el.style.setProperty('--sc',SC[c]);el.innerHTML=ptxt(CATS[c],'#c0392b');b.appendChild(el)});
     return}
-  LIST.forEach((t,i)=>{
+  const GROUPS=CAT===3?[[11,12],[13,14],[15,16],[17,18],[19],[20,21]]:[LIST.map(t=>t.n)];
+  let gi=0;GROUPS.forEach((ns,g)=>{const box=document.createElement('div');box.className=GROUPS.length>1?'grp':'grp plain';
+    if(GROUPS.length>1)box.innerHTML=`<span class="gno">${g+1}</span>`;
+    ns.map(n=>TOPICS.find(t=>t.n===n)).forEach(t=>{const i=gi++;
     const el=document.createElement('a');el.className='tp'+(v.includes(t.n)?' seen':'');el.href='gemtalk.html?t='+t.n;el.dataset.n=t.n;
     el.style.setProperty('--i',i);el.style.setProperty('--sc',SC[t.sec]);el.title=t.label.replace(/\n/g,'');
     el.innerHTML=`${ptxt(t.label,'#6b4226')}<span class="no">${t.n}</span>${t.pages>1?`<span class="pg">${t.pages} 頁</span>`:''}`;
-    b.appendChild(el)});
+    box.appendChild(el)});b.appendChild(box)});
 }
 function layout(){}
 addEventListener('resize',layout);

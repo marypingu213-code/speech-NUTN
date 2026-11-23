@@ -38,7 +38,7 @@ h1{font-size:clamp(22px,2.6vw,34px);line-height:1}
 .half[data-h="2"] .pair{grid-template-columns:1fr 1.75fr}
 .col{display:flex;flex-direction:column;align-items:center;min-width:0}
 .cat{width:min(100%,clamp(170px,12vw,240px));height:clamp(64px,7.5vh,96px);border-radius:18px;display:flex;align-items:center;justify-content:center;text-decoration:none;
-  background:var(--bg);border:5px solid #fff;box-shadow:0 6px 18px rgba(58,51,48,.13);font-size:clamp(20px,2.3vh,30px);flex:none;animation:in .5s both;animation-delay:calc(var(--i)*90ms + .15s)}
+  background:var(--bg);border:5px solid #fff;box-shadow:0 6px 18px rgba(58,51,48,.13);font-size:clamp(26px,3.1vh,40px);flex:none;animation:in .5s both;animation-delay:calc(var(--i)*90ms + .15s)}
 .items{display:flex;flex-direction:column;gap:1vh;margin-top:2vh;width:100%;align-items:stretch}
 .col[data-c="3"] .items{padding-left:30px}
 .grp .spacer{flex:0 0 calc(50% - 5px)}
@@ -60,6 +60,9 @@ h1{font-size:clamp(22px,2.6vw,34px);line-height:1}
 .tp.seen .no::after{content:"✓";color:#3c8d5a;margin-left:2px}
 .tp.hot{border-color:var(--red);transform:scale(1.07);box-shadow:0 12px 30px rgba(192,57,43,.35);z-index:4}
 @media (max-width:1000px){.halves{grid-template-columns:1fr}.divider{display:none}.half+.divider+.half{margin-top:4vh}.half .pair{grid-template-columns:1fr!important}}
+#lk{position:fixed;inset:0;background:rgba(30,26,24,.82);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
+#lk.hidden{display:none}
+#lk .btn{font-size:22px;justify-content:center;padding:14px 24px}
 #pick{position:fixed;inset:0;background:rgba(30,26,24,.82);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
 #pick.hidden{display:none}
 .pbox{background:var(--paper);border-radius:28px;padding:26px;width:min(560px,100%);text-align:center;display:flex;flex-direction:column;gap:16px;align-items:center;animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
@@ -80,6 +83,7 @@ h1{font-size:clamp(22px,2.6vw,34px);line-height:1}
   <a class="btn ghost" href="index.html">首頁</a>
 </header>
 <main id="board"></main>
+<div id="lk" class="hidden" onclick="if(event.target===this)this.classList.add('hidden')"><div class="pbox"><div class="nm" id="lkT"></div><div class="row" id="lkL" style="flex-direction:column;align-items:stretch"></div><div class="row"><button class="btn ghost" onclick="document.getElementById('lk').classList.add('hidden')">關閉</button></div></div></div>
 <div id="pick" class="hidden"><div class="pbox">
   <div class="t" id="pT">抽到了！</div>
   <div class="nm" id="pNm"></div>
@@ -100,9 +104,11 @@ const GROUPS={1:[[2],[3],[4],[5],[6],[7]],2:[[8],[9],[10]],3:[[11,12],[13,14],[1
 const SOON=['學習單','Liveworksheet網站','GitHub網站連結','適應體育','社會技巧'];
 const HALVES=[{h:1,label:'教師工作',cols:[1,4]},{h:2,label:'班級經營',cols:[2,3]}];
 function colHTML(c){return `<div class="col" data-c="${c}"><div class="cat" style="--bg:${BG[c]};--i:${c}">${ptxt(CATS[c],'#c0392b')}</div><div class="items"></div></div>`}
-const ONE={2:1,3:1,6:1,7:1,15:1};const SPLIT={14:'南美館＋街道美術館＋\n普濟殿'};
+const ONE={2:1,3:1,6:1,7:1,15:1};const SPLIT={14:'南美館＋街道美術館\n＋普濟殿'};
 const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function lbl(t){return SPLIT[t.n]||(ONE[t.n]?t.label.replace(/\n/g,''):t.label)}
+const LINKS={'Liveworksheet網站':[['國語學習單','https://www.liveworksheets.com/worksheet/zh/chinese-language-cl/7024855'],['英語閱讀學習單','https://www.liveworksheets.com/worksheet/zh/esl-reading/1401022']]};
+function openLinks(title,lk){$('lkT').textContent=title;$('lkL').innerHTML=lk.map(([n,u])=>`<a class="btn" href="${u}" target="_blank" rel="noopener">🔗 ${esc(n)}</a>`).join('');$('lk').classList.remove('hidden')}
 function build(){
   const b=$('board');const v=visited();let gi=0;
   b.innerHTML='<svg id="lines"></svg><div class="hub" id="hub"><img src="img/gems-cover.jpg" alt="寶石鑑定室"></div><div class="halves" id="halves"></div>';
@@ -118,7 +124,9 @@ function build(){
         row.appendChild(el)});if(c===3&&ns.length===1){const sp=document.createElement('div');sp.className='spacer';row.appendChild(sp)}items.appendChild(row)})});
   const it4=document.querySelector('.col[data-c="4"] .items');
   SOON.forEach(lb=>{const el=document.createElement('a');el.className='tp soon';el.href='#';el.title=lb;el.style.setProperty('--i',gi++);el.style.setProperty('--sc',SC[4]);
-    el.innerHTML=`<span class="tl">${esc(lb)}</span><span class="pg">準備中</span>`;el.onclick=e=>{e.preventDefault();alert('「'+lb+'」內容準備中！')};
+    const lk=LINKS[lb];if(lk){el.className='tp';}
+    el.innerHTML=`<span class="tl">${esc(lb)}</span><span class="pg">${lk?lk.length+' 份':'準備中'}</span>`;
+    el.onclick=e=>{e.preventDefault();if(lk)openLinks(lb,lk);else alert('「'+lb+'」內容準備中！')};
     const row=document.createElement('div');row.className='grp';row.appendChild(el);it4.appendChild(row)});
   requestAnimationFrame(()=>setTimeout(layout,30));
 }

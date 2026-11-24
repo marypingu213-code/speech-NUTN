@@ -126,8 +126,8 @@ const ONE={2:1,3:1,6:1,7:1,15:1};const SPLIT={14:'南美館＋街道美術館\n�
 const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function lbl(t){return SPLIT[t.n]||(ONE[t.n]?t.label.replace(/\n/g,''):t.label)}
 const LINKS={'Liveworksheet網站':[['國語學習單','https://www.liveworksheets.com/worksheet/zh/chinese-language-cl/7024855'],['英語閱讀學習單','https://www.liveworksheets.com/worksheet/zh/esl-reading/1401022']],'GitHub網站連結':[['鑽石數學','https://marypingu213-code.github.io/diamond-math/'],['因數與倍數','https://marypingu213-code.github.io/Factors-multiples/'],['長除法','https://marypingu213-code.github.io/long-division/']]};
-const IMGS={'社會技巧':['img/social/1.jpg','img/social/2.jpg'],'適應體育':['img/pe/1.jpg','img/pe/2.jpg']};
-function openImgs(title,im){$('lkT').textContent=title;$('lkL').innerHTML=im.map(u=>`<a href="${u}" target="_blank" rel="noopener"><img src="${u}" alt="" style="width:100%;border-radius:10px;display:block"></a>`).join('');$('lk').classList.add('wide');$('lk').classList.remove('hidden')}
+const IMGS={'社會技巧':['img/social/1.jpg','img/social/2.jpg'],'適應體育':['img/pe/1.jpg','img/pe/2.jpg','img/pe/book1.jpg','img/pe/book2.jpg','img/pe/book3.jpg']};
+function openImgs(title,im){$('lkT').textContent=title;$('lkL').innerHTML=im.map(u=>`<a href="${u}" target="_blank" rel="noopener"><img src="${u}" alt="" style="${/book/.test(u)?'max-height:80vh;width:auto;max-width:100%;margin:0 auto':'width:100%'};border-radius:10px;display:block"></a>`).join('');$('lk').classList.add('wide');$('lk').classList.remove('hidden')}
 function openLinks(title,lk){$('lkT').textContent=title;$('lkL').innerHTML=lk.map(([n,u])=>`<a class="btn" href="${u}" target="_blank" rel="noopener">🔗 ${esc(n)}</a>`).join('');$('lk').classList.remove('wide');$('lk').classList.remove('hidden')}
 function build(){
   const b=$('board');const v=visited();let gi=0;

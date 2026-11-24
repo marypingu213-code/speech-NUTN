@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
+<style>html.locked body>*:not(#gate){visibility:hidden!important}
+#gate{position:fixed;inset:0;z-index:9999;background:#f8f2e4;display:flex;align-items:center;justify-content:center;padding:16px;font-family:"Iansui",system-ui,sans-serif;color:#3a3330}
+#gate form{background:#fffaf0;border-radius:24px;padding:30px 28px;box-shadow:0 10px 30px rgba(58,51,48,.15);width:min(380px,100%);display:flex;flex-direction:column;gap:14px;text-align:center}
+#gate h2{font-size:26px;color:#c0392b;letter-spacing:.08em}
+#gate input{font:inherit;font-size:22px;padding:12px 14px;border:2px solid rgba(58,51,48,.18);border-radius:12px;text-align:center;letter-spacing:.1em}
+#gate button{font:inherit;font-size:19px;border:0;border-radius:999px;padding:12px;background:#c0392b;color:#fff;cursor:pointer}
+#gate .err{color:#c0392b;font-size:15px;min-height:1.2em}#gate a{color:#7d716a;font-size:15px}</style>
+<script>(function(){var H="bfbc04da9d3274d53241cd3eef70e2215ce493cbbbd10c59582f344d8740bcb3",K="gate-ok";var ok=false;try{ok=sessionStorage.getItem(K)===H}catch(e){}
+if(ok)return;document.documentElement.classList.add("locked");
+async function sha(t){var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("")}
+function show(){var g=document.createElement("div");g.id="gate";g.innerHTML='<form><h2>🔒 請輸入密碼</h2><input type="password" autocomplete="off" autofocus aria-label="密碼"><button type="submit">進入</button><div class="err"></div><a href="index.html">← 回首頁</a></form>';
+document.body.appendChild(g);var f=g.querySelector("form"),i=g.querySelector("input"),e=g.querySelector(".err");i.focus();
+f.onsubmit=async function(ev){ev.preventDefault();var v=i.value.trim();if(!v)return;var r=await sha(v);
+if(r===H){try{sessionStorage.setItem(K,H)}catch(x){}g.remove();document.documentElement.classList.remove("locked");dispatchEvent(new Event("resize"))}
+else{e.textContent="密碼不正確，請再試一次";i.value="";i.focus()}}}
+if(document.body)show();else document.addEventListener("DOMContentLoaded",show)})();</script>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>資源班的N種可能</title>

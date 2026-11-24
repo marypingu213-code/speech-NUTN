@@ -80,7 +80,7 @@ h1{font-size:clamp(22px,2.6vw,34px);line-height:1}
 #lk{position:fixed;inset:0;background:rgba(30,26,24,.82);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
 #lk.hidden{display:none}
 #lk.wide .pbox{width:min(1400px,96vw);max-height:94vh;overflow:auto}
-#lk .btn{font-size:22px;justify-content:center;padding:14px 24px}
+#lk .btn{font-size:clamp(16px,2.4vw,22px);white-space:normal;line-height:1.4;text-align:center;justify-content:center;padding:14px 24px}
 #pick{position:fixed;inset:0;background:rgba(30,26,24,.82);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
 #pick.hidden{display:none}
 .pbox{background:var(--paper);border-radius:28px;padding:26px;width:min(560px,100%);text-align:center;display:flex;flex-direction:column;gap:16px;align-items:center;animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
@@ -118,14 +118,14 @@ const CATS={1:'教師行政',4:'教師教學',2:'自我賦能',3:'走讀共學'}
 SC[4]='#e8956b';
 if(new URLSearchParams(location.search).get('c'))history.replaceState(null,'','gems.html');
 const HIDDEN=[1];
-const GROUPS={1:[[2],[3],[4],[5],[6],[7]],2:[[8],[9],[10]],3:[[11,12],[13,14],[15,16],[17,18],[19],[20,21]]};
+const GROUPS={1:[[2],[3],[4],[5],[6],[7]],2:[[8],[9],[10]],3:[[11,12],[13,14],[15,16],[17,18],[19,'新聞報導'],[20,21]]};
 const SOON=['學習單','Liveworksheet網站','GitHub網站連結','適應體育','社會技巧'];
 const HALVES=[{h:1,label:'教師工作',cols:[1,4]},{h:2,label:'班級經營',cols:[2,3]}];
 function colHTML(c){return `<div class="col" data-c="${c}"><div class="cat" style="--bg:${BG[c]};--i:${c}">${ptxt(CATS[c],'#c0392b')}</div><div class="items"></div></div>`}
 const ONE={2:1,3:1,6:1,7:1,15:1};const SPLIT={14:'南美館＋街道美術館\n＋普濟殿'};
 const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function lbl(t){return SPLIT[t.n]||(ONE[t.n]?t.label.replace(/\n/g,''):t.label)}
-const LINKS={'Liveworksheet網站':[['國語學習單','https://www.liveworksheets.com/worksheet/zh/chinese-language-cl/7024855'],['英語閱讀學習單','https://www.liveworksheets.com/worksheet/zh/esl-reading/1401022']],'GitHub網站連結':[['鑽石數學','https://marypingu213-code.github.io/diamond-math/'],['因數與倍數','https://marypingu213-code.github.io/Factors-multiples/'],['長除法','https://marypingu213-code.github.io/long-division/']]};
+const LINKS={'新聞報導':[['從「福爾摩沙」出發　裕文國小資源班走讀府城（中華日報／LINE TODAY）','https://today.line.me/tw/v3/article/nX3Pa81']],'Liveworksheet網站':[['國語學習單','https://www.liveworksheets.com/worksheet/zh/chinese-language-cl/7024855'],['英語閱讀學習單','https://www.liveworksheets.com/worksheet/zh/esl-reading/1401022']],'GitHub網站連結':[['鑽石數學','https://marypingu213-code.github.io/diamond-math/'],['因數與倍數','https://marypingu213-code.github.io/Factors-multiples/'],['長除法','https://marypingu213-code.github.io/long-division/']]};
 const IMGS={'社會技巧':['img/social/1.jpg','img/social/2.jpg'],'適應體育':['img/pe/1.jpg','img/pe/2.jpg','img/pe/book1.jpg','img/pe/book2.jpg','img/pe/book3.jpg']};
 function openImgs(title,im){$('lkT').textContent=title;$('lkL').innerHTML=im.map(u=>`<a href="${u}" target="_blank" rel="noopener"><img src="${u}" alt="" style="${/book/.test(u)?'max-height:80vh;width:auto;max-width:100%;margin:0 auto':'width:100%'};border-radius:10px;display:block"></a>`).join('');$('lk').classList.add('wide');$('lk').classList.remove('hidden')}
 function openLinks(title,lk){$('lkT').textContent=title;$('lkL').innerHTML=lk.map(([n,u])=>`<a class="btn" href="${u}" target="_blank" rel="noopener">🔗 ${esc(n)}</a>`).join('');$('lk').classList.remove('wide');$('lk').classList.remove('hidden')}
@@ -136,7 +136,10 @@ function build(){
     $('halves').insertAdjacentHTML('beforeend',`<div class="half" data-h="${H.h}"><div class="branch">${ptxt(H.label,'#c0392b')}</div><div class="pair">${H.cols.map(colHTML).join('')}</div></div>`)});
   [1,2,3].forEach(c=>{const items=document.querySelector(`.col[data-c="${c}"] .items`);
     GROUPS[c].forEach((ns,g)=>{const row=document.createElement('div');row.className='grp';
-      ns.forEach(n=>{const t=TOPICS.find(x=>x.n===n);const el=document.createElement('a');
+      ns.forEach(n=>{if(typeof n==='string'){const lk=LINKS[n];const el=document.createElement('a');el.className='tp';el.href='#';el.title=n;
+          el.style.setProperty('--i',gi++);el.style.setProperty('--sc',SC[c]);el.innerHTML=`<span class="tl">${esc(n)}</span><span class="pg">${lk.length} 篇</span>`;
+          el.onclick=e=>{e.preventDefault();openLinks(n,lk)};row.appendChild(el);return}
+        const t=TOPICS.find(x=>x.n===n);const el=document.createElement('a');
         el.className='tp'+(v.includes(n)?' seen':'');el.href='gemtalk.html?t='+n;el.dataset.n=n;el.title=t.label.replace(/\n/g,'');
         el.style.setProperty('--i',gi++);el.style.setProperty('--sc',SC[c]);
         el.innerHTML=`<span class="tl${SPLIT[t.n]?' sm':''}">${esc(lbl(t))}</span>${t.pages>1?`<span class="pg">${t.pages}頁</span>`:''}`;

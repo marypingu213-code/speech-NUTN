@@ -86,7 +86,7 @@ function layout(){
   for(let c=4;c<=16;c++){const r=Math.ceil(N/c),gap=Math.max(4,Math.min(10,W/c*0.06));
     const cw=(W-gap*(c+1))/c,ch=(H-gap*(r+1))/r;const s=Math.min(cw,ch/1.05);
     if(!best||s>best.s)best={c,r,gap,s,cw,ch}}
-  if(best.s<92){ // too small (phone): scroll mode
+  if(best.s<72){ // too small (phone): scroll mode
     const c=W<500?3:W<800?4:6,gap=8,cw=(W-gap*(c+1))/c;
     document.body.classList.add('scroll');
     b.style.gridTemplateColumns=`repeat(${c},1fr)`;b.style.gridTemplateRows='';b.style.gridAutoRows=(cw*1.08)+'px';

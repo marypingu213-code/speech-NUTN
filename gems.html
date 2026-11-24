@@ -19,7 +19,7 @@ button{font:inherit;color:inherit}
 .ptxt{display:inline-block;vertical-align:middle;width:auto;max-width:100%;object-fit:contain}
 .ptxt.pl{display:block;margin:0 auto}.ptxt.pl+.ptxt.pl{margin-top:.1em}
 header{flex:none;display:flex;align-items:center;gap:12px;padding:8px 14px;border-bottom:1px solid var(--line);background:rgba(248,242,228,.96);flex-wrap:wrap}
-header .logo{height:44px;width:auto;border-radius:8px;background:#fff}
+header .logo{height:44px;width:auto}
 h1{font-size:clamp(22px,2.6vw,34px);line-height:1}
 .sp{flex:1}
 .btn{border:0;border-radius:999px;padding:9px 20px;font-size:17px;font-weight:700;cursor:pointer;background:var(--red);color:#fff;box-shadow:0 4px 12px rgba(192,57,43,.25);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
@@ -27,12 +27,12 @@ h1{font-size:clamp(22px,2.6vw,34px);line-height:1}
 #board{position:relative;flex:1;width:100%;max-width:1800px;margin:0 auto;padding:1.2vh 20px 2.5vh;display:flex;flex-direction:column;align-items:center}
 #lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 #lines path{fill:none;stroke:#c0392b;stroke-opacity:.38;stroke-width:3;stroke-dasharray:2 9;stroke-linecap:round}
-.hub{position:relative;z-index:1;width:clamp(86px,10vh,130px);height:clamp(86px,10vh,130px);border-radius:50%;background:#fff;border:5px solid #fff;box-shadow:0 8px 22px rgba(58,51,48,.18);overflow:hidden;flex:none;animation:in .5s both}
-.hub img{width:100%;height:100%;object-fit:contain;padding:8px}
+.hub{position:relative;z-index:1;width:clamp(200px,24vh,300px);flex:none;animation:in .5s both}
+.hub img{width:100%;height:auto;display:block}
 .halves{position:relative;z-index:1;display:grid;grid-template-columns:2fr auto 2.6fr;gap:clamp(14px,1.8vw,36px);width:100%;margin-top:2.2vh;align-items:start}
-.divider{width:0;border-left:3px solid rgba(125,113,106,.35);align-self:stretch;margin-top:1vh}
+.divider{width:0;align-self:stretch}
 .half{display:flex;flex-direction:column;align-items:center;min-width:0}
-.branch{font-size:clamp(26px,3.2vh,42px);background:#fff;border-radius:999px;padding:.25em 1.2em;box-shadow:0 4px 14px rgba(58,51,48,.12);animation:in .5s both;animation-delay:.08s}
+.branch{font-size:clamp(26px,3.2vh,42px);padding:.15em .6em;animation:in .5s both;animation-delay:.08s}
 .pair{display:grid;gap:clamp(12px,1.4vw,28px);width:100%;margin-top:2.6vh;align-items:start}
 .half[data-h="1"] .pair{grid-template-columns:1fr 1fr}
 .half[data-h="2"] .pair{grid-template-columns:1fr 1.75fr}
@@ -76,7 +76,7 @@ h1{font-size:clamp(22px,2.6vw,34px);line-height:1}
 </head>
 <body>
 <header>
-  <img class="logo" src="img/gems-cover.jpg" alt="">
+  <img class="logo" src="img/gem-one.png" alt="">
   <h1 id="title" aria-label="寶石鑑定室"></h1>
   <span class="sp"></span>
   <button class="btn" id="bRand">🎲 隨機抽一個</button>
@@ -114,7 +114,7 @@ function openImgs(title,im){$('lkT').textContent=title;$('lkL').innerHTML=im.map
 function openLinks(title,lk){$('lkT').textContent=title;$('lkL').innerHTML=lk.map(([n,u])=>`<a class="btn" href="${u}" target="_blank" rel="noopener">🔗 ${esc(n)}</a>`).join('');$('lk').classList.remove('wide');$('lk').classList.remove('hidden')}
 function build(){
   const b=$('board');const v=visited();let gi=0;
-  b.innerHTML='<svg id="lines"></svg><div class="hub" id="hub"><img src="img/gems-cover.jpg" alt="寶石鑑定室"></div><div class="halves" id="halves"></div>';
+  b.innerHTML='<svg id="lines"></svg><div class="hub" id="hub"><img src="img/gems-cover.png" alt="寶石鑑定室"></div><div class="halves" id="halves"></div>';
   HALVES.forEach((H,k)=>{if(k)$('halves').insertAdjacentHTML('beforeend','<div class="divider"></div>');
     $('halves').insertAdjacentHTML('beforeend',`<div class="half" data-h="${H.h}"><div class="branch">${ptxt(H.label,'#c0392b')}</div><div class="pair">${H.cols.map(colHTML).join('')}</div></div>`)});
   [1,2,3].forEach(c=>{const items=document.querySelector(`.col[data-c="${c}"] .items`);
